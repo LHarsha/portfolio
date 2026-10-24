@@ -58,7 +58,7 @@ export const projects = [
     slug: 'anti-gravity',
     name: 'Anti Gravity',
     kind: '3D project manager',
-    live: 'https://solar-3js.pages.dev/',
+    live: null, // solar-3js.pages.dev has no hand gestures yet; Harsha will send a newer demo
     repo: 'https://github.com/LHarsha/Solar-3js',
     summary:
       'A web app where planets in a 3D solar system represent projects, controlled with hand gestures.',
