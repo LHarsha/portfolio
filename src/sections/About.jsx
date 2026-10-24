@@ -5,6 +5,7 @@ import { useGSAP } from '@gsap/react';
 import { Portal } from '../art/Portal.jsx';
 import { Avatar } from '../art/Avatar.jsx';
 import { GooEdge } from '../art/GooEdge.jsx';
+import { Drift } from '../art/Drift.jsx';
 import { blip } from '../lib/sound.js';
 import { points, useScene } from '../lib/story.js';
 import { person, education } from '../data/facts.js';
@@ -130,6 +131,7 @@ export function About() {
   return (
     <section id="about" className="about scene" data-scene ref={root} aria-labelledby="about-title">
       <GooEdge from="hero" />
+      <Drift seed={5} corner="tr" />
       <div className="about__scene" data-exit>
         <div className="about__portal" aria-hidden="true">
           <Portal spin />
@@ -160,7 +162,7 @@ export function About() {
               I like turning ideas into things people can open and use: a party game you play on your phone, an AI that
               helps debug code, a solar system you steer with your hands.
             </p>
-            <p>Right now I'm open to internships in AI/ML and software, and to freelance work.</p>
+            <p>Right now I'm open to internships and freelance work.</p>
           </div>
         </div>
       </div>

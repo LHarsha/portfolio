@@ -91,6 +91,14 @@ export function Story({ order, onState, children }) {
           s.el.style.zIndex = s.cfg.z ?? i + 1;
           const off = s.cfg.build({ tl, q: gsap.utils.selector(s.el), el: s.el, exit });
           if (typeof off === 'function') cleanups.push(off);
+          // the background clutter (Drift) tumbles toward its far portal for the scene's whole run
+          const items = s.el.querySelectorAll('.drift__item');
+          if (items.length) {
+            const d = tl.duration();
+            // drift distances are shares of the screen, so they're read again on every refresh
+            tl.fromTo(items, { x: 0, y: 0, rotation: 0 }, { x: (i, t) => t.dataset.dx * window.innerWidth, y: (i, t) => t.dataset.dy * window.innerHeight, rotation: (i, t) => +t.dataset.rot, duration: d }, 0)
+              .fromTo(s.el.querySelectorAll('.drift__portal'), { rotation: 0 }, { rotation: -150, duration: d }, 0);
+          }
           const start = Math.max(0, end - inLen);
           master.add(tl, start);
           spans.push({ id: s.id, el: s.el, start, end: start + tl.duration(), inLen, labels: { ...tl.labels }, toneAt: s.cfg.toneAt, on: null });

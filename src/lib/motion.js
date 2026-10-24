@@ -16,11 +16,11 @@ export function useReducedMotion() {
   return reduced;
 }
 
-// Pause boil animations (filter boil and the portal's drawn takes) while they're off-screen.
+// Pause boil animations (filter boil, the portal's drawn takes, the background clutter's idle) while they're off-screen.
 export function pauseBoilOffscreen(root = document) {
   const io = new IntersectionObserver((entries) => {
     for (const e of entries) e.target.classList.toggle('is-offscreen', !e.isIntersecting);
   });
-  root.querySelectorAll('.boil, .jitter, .portal').forEach((el) => io.observe(el));
+  root.querySelectorAll('.boil, .portal, .drift').forEach((el) => io.observe(el));
   return () => io.disconnect();
 }

@@ -25,7 +25,7 @@
   background-position: 20px 60px, 90px 30px;
   opacity: 0.7;
 }
-.end > *:not(.goo-edge):not(.end__dot) { position: relative; }
+.end > *:not(.goo-edge, .end__dot, .drift) { position: relative; }
 
 /* the dot an old CRT leaves behind when it switches off; only the stage shows it */
 .end__dot {
@@ -63,7 +63,8 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
-  gap: 1rem 1.25rem;
+  /* the row gap leaves room for the copy button's drips when the row wraps */
+  gap: 2.75rem 1.25rem;
   padding-bottom: 1.25rem;
   color: var(--ink);
 }

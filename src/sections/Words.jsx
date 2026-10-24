@@ -4,7 +4,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { statements } from '../data/facts.js';
 import { GooEdge } from '../art/GooEdge.jsx';
-import { Flood, pour } from '../art/Flood.jsx';
+import { Drift } from '../art/Drift.jsx';
+import { Flood, pour, tipsy } from '../art/Flood.jsx';
 import { points, useScene } from '../lib/story.js';
 import { rng } from '../lib/rng.js';
 import './words.css';
@@ -40,6 +41,7 @@ function Working() {
   return (
     <article className="words words--working belief" aria-labelledby="working-title">
       <GooEdge from="about" />
+      <Drift seed={7} corner="br" />
       <div className="words__inner" data-exit>
         <h2 id="working-title" className="words__head">
           {s.lead}
@@ -71,6 +73,7 @@ function Useful() {
     <article className="words words--useful belief" aria-labelledby="useful-title">
       <Flood color="var(--alien)" />
       <GooEdge color="var(--portal)" />
+      <Drift seed={9} corner="tr" />
       <div className="words__inner" data-exit>
         <h2 id="useful-title" className="words__head">
           <span className="words__line">
@@ -127,6 +130,7 @@ function Easier() {
     <article className="words words--easier belief" aria-labelledby="easier-title">
       <Flood color="var(--space)" />
       <GooEdge color="var(--alien)" />
+      <Drift seed={11} corner="br" tone="light" />
       <div className="words__inner" data-exit>
         <h2 id="easier-title" className="words__head">
           {s.lead}
@@ -194,16 +198,18 @@ export function Words() {
       );
       // 1. working, then its paragraph reads in
       t.working(tl, 0.42, 0.5);
-      tl.fromTo(more(working), { opacity: 0.15 }, { opacity: 1, duration: 0.3 }, 0.85).addLabel('settle', 0.95);
+      tl.fromTo(more(working), { opacity: 0.15 }, { opacity: 1, duration: 0.3 }, 0.8).addLabel('settle', 1.12);
       // ...then keep improving it: past v1.0 while the next belief pours in
       t.improving(tl, 1.2, 0.45);
       // 2. useful pours in
       pour(tl, useful, 1.3, 0.35);
+      tipsy(tl, inner(working), 1.28, 0.4);
       tl.fromTo(inner(useful), { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.15 }, 1.55);
       t.useful(tl, 1.65, 0.45);
       tl.fromTo(more(useful), { opacity: 0.15 }, { opacity: 1, duration: 0.3 }, 2.0).addLabel('useful', 2.32);
       // 3. easier pours in
       pour(tl, easier, 2.45, 0.35);
+      tipsy(tl, inner(useful), 2.43, 0.4);
       tl.fromTo(inner(easier), { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.15 }, 2.7);
       t.easier(tl, 2.8, 0.5);
       tl.fromTo(more(easier), { opacity: 0.15 }, { opacity: 1, duration: 0.3 }, 3.2).addLabel('easier', 3.52).to({}, { duration: 0.15 }, 3.5);

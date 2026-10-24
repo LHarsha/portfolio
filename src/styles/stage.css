@@ -14,34 +14,61 @@
   pointer-events: none;
 }
 .is-stage > .scene.is-on { opacity: 1; pointer-events: auto; }
-/* scenes that aren't showing stop their line boil */
-.is-stage > .scene:not(.is-on) :is(.jitter, .boil, .portal *) { animation-play-state: paused; }
+/* scenes that aren't showing stop their line boil and idle motion */
+.is-stage > .scene:not(.is-on) :is(.boil, .portal *, .drift *) { animation-play-state: paused; }
 
 /* the stacked page's goo hand-overs; the stage has its own transitions */
 .is-stage .goo-edge { display: none; }
 
-/* a flood: the scene's colour pouring down, drips leading (src/art/Flood.jsx) */
+/* a spill: the scene's colour surging up like a knocked-over drink (src/art/Flood.jsx) */
 .flood { display: none; }
 .is-stage .flood {
   display: block;
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: var(--flood);
+  overflow: hidden;
 }
-.flood__drips {
+/* wider and taller than the screen so it can tilt without showing its edges; the crest (surface
+   and foam) sits above the screen's top once it has settled */
+.spill {
+  --crest-h: calc(140vw * 160 / 2400);
   position: absolute;
-  left: 0;
-  top: calc(100% - 2px);
-  width: 100%;
-  height: clamp(70px, 9vw, 110px);
-  overflow: visible;
+  left: -20%;
+  width: 140%;
+  top: calc(var(--crest-h) * -1);
+  height: calc(100% + var(--crest-h) + 35%);
+  display: flex;
+  flex-direction: column;
+  transform-origin: 50% 0;
+  will-change: transform;
 }
-.flood__drips path { fill: var(--flood); stroke: var(--ink); stroke-width: 3; vector-effect: non-scaling-stroke; }
+.spill__crest { display: block; flex: none; width: 100%; height: var(--crest-h); overflow: visible; margin-bottom: -2px; }
+.spill__body { position: relative; flex: 1; background: var(--flood); }
+.spill__liquid { fill: var(--flood); }
+.spill__shade { fill: color-mix(in srgb, var(--flood) 70%, var(--ink)); }
+.spill__foam { fill: var(--labcoat); stroke: var(--ink); stroke-width: 3; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.spill__foam-bubble { fill: none; stroke: color-mix(in srgb, var(--labcoat) 55%, var(--ink)); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.spill__splash { fill: var(--flood); stroke: var(--ink); stroke-width: 2.5; stroke-linejoin: round; vector-effect: non-scaling-stroke; opacity: 0; }
+.spill__fizz {
+  position: absolute;
+  border: 2.5px solid color-mix(in srgb, var(--flood) 45%, white);
+  border-radius: 50%;
+}
+.spill__fizz::after {
+  content: '';
+  position: absolute;
+  top: 18%;
+  left: 22%;
+  width: 26%;
+  height: 26%;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--flood) 30%, white);
+}
 /* where a flood is the background, the scene's own colour steps aside */
 .is-stage :is(.work, .toolkit, .words--useful, .words--easier) { background: transparent; }
 .is-stage .words--easier::before { display: none; }
-.is-stage .words--easier .flood {
+.is-stage .words--easier .spill__body {
   background-image:
     radial-gradient(var(--labcoat) 1.4px, transparent 1.8px),
     radial-gradient(var(--labcoat) 1px, transparent 1.4px);

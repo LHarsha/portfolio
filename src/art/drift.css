@@ -1,0 +1,64 @@
+/* faint background clutter behind a scene (src/art/Drift.jsx) */
+.drift {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+/* the faintness sits on each piece, not the whole layer: an opacity group the size of the screen
+   with moving parts inside has to be re-blended every frame */
+.drift--ink { color: var(--ink); --faint: 0.14; }
+.drift--light { color: var(--labcoat); --faint: 0.17; }
+.drift svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.drift path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* each piece: placed by left/top, moved by GSAP on the stage (transform), idling inside (.drift__bob) */
+.drift__item {
+  position: absolute;
+  width: calc(var(--s) * clamp(42px, 4.3vw, 66px));
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  opacity: var(--faint);
+  /* its own layer, so the scroll drift moves it without redrawing it */
+  will-change: transform;
+}
+.drift__bob {
+  width: 100%;
+  height: 100%;
+  animation: drift-bob-a var(--d) ease-in-out var(--delay) infinite alternate;
+  will-change: transform;
+}
+/* fixed values in the keyframes (a var() there would push the animation off the compositor);
+   the four variants plus per-piece duration and delay keep the pieces out of step */
+.drift__bob[data-bob='1'] { animation-name: drift-bob-b; }
+.drift__bob[data-bob='2'] { animation-name: drift-bob-c; }
+.drift__bob[data-bob='3'] { animation-name: drift-bob-d; }
+@keyframes drift-bob-a { from { transform: translateY(-8px) rotate(-4deg); } to { transform: translateY(8px) rotate(4deg); } }
+@keyframes drift-bob-b { from { transform: translateY(10px) rotate(6deg); } to { transform: translateY(-10px) rotate(-3deg); } }
+@keyframes drift-bob-c { from { transform: translate(-6px, -12px) rotate(3deg); } to { transform: translate(6px, 12px) rotate(-6deg); } }
+@keyframes drift-bob-d { from { transform: translate(5px, 7px) rotate(-7deg); } to { transform: translate(-5px, -7px) rotate(5deg); } }
+
+/* the distant portal keeps slowly turning; a little fainter than the clutter in front of it */
+.drift__portal {
+  position: absolute;
+  width: clamp(170px, 18vw, 270px);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  opacity: calc(var(--faint) * 0.8);
+  will-change: transform;
+}
+.drift__spin { animation: spin 40s linear infinite; will-change: transform; }
+
+/* idle motion only runs where it can be seen */
+.drift.is-offscreen :is(.drift__bob, .drift__spin) { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .drift__bob, .drift__spin { animation: none; }
+}

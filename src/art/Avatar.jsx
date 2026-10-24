@@ -10,7 +10,7 @@ const blob = 'M130 12C196 10 248 60 248 132C250 206 200 262 128 262C58 264 10 21
 export function Avatar({ className = '' }) {
   const clip = useId();
   return (
-    <svg className={`avatar jitter ${className}`} viewBox="0 0 260 270" role="img" aria-label="Cartoon drawing of Harsha with his guitar" focusable="false">
+    <svg className={`avatar ${className}`} viewBox="0 0 260 270" role="img" aria-label="Cartoon drawing of Harsha with his guitar" focusable="false">
       <defs>
         <clipPath id={clip}>
           <path d={blob} />

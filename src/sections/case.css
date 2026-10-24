@@ -30,7 +30,8 @@
 .case__kind { font-family: var(--font-hand); font-size: var(--step-hand); }
 .case__title { font-family: var(--font-display); font-size: clamp(3rem, 1.2rem + 7vw, 7.5rem); line-height: 0.92; }
 .case__lead { max-width: 52ch; font-size: clamp(1.15rem, 1rem + 0.6vw, 1.5rem); line-height: 1.45; }
-.case__actions { display: flex; flex-wrap: wrap; gap: 1rem 1.25rem; padding-bottom: 2.25rem; }
+/* the row gap leaves room for the live button's drips when the buttons wrap */
+.case__actions { display: flex; flex-wrap: wrap; gap: 2.75rem 1.25rem; padding-bottom: 2.25rem; }
 
 /* desktop shot and phone shot side by side; the phone column is cut to the desktop shot's height */
 .case__shots { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 1fr); gap: clamp(1rem, 2vw, 2rem); align-items: stretch; }

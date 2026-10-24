@@ -2,6 +2,7 @@
   /* palette: daylight first, space as an accent */
   --portal: #97ce4c;
   --portal-dark: #5a9a2a;
+  --portal-mid: #78b53a; /* between portal and portal-dark: the portal's funnel */
   --portal-light: #d8f5a2;
   --portal-ink: #3d6b1a; /* green for text on light backgrounds (5.6:1 on labcoat) */
   --labcoat: #eef3f1;

@@ -61,16 +61,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .boil { animation: boil 0.36s infinite; }
 .boil.is-offscreen { animation-play-state: paused; }
 
-/* cheaper cousin for bigger drawings: a tiny nudge-and-tilt held on twos. It's a pure transform,
-   so the compositor handles it with no repaint (SVG filters are CPU-drawn and add up fast). */
-@keyframes jitter {
-  0%, 33.32% { transform: none; }
-  33.33%, 66.65% { transform: translate(0.6px, -0.4px) rotate(-0.35deg); }
-  66.66%, 100% { transform: translate(-0.4px, 0.5px) rotate(0.3deg); }
-}
-.jitter { animation: jitter 0.36s infinite; will-change: transform; }
-.jitter.is-offscreen { animation-play-state: paused; }
-
 @keyframes spin { to { transform: rotate(-360deg); } }
 
 /* hand-drawn button */
@@ -94,15 +84,100 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .btn:active { transform: translate(3px, 3px); box-shadow: var(--shadow-press); transition-duration: 90ms; }
 .btn--plain { background: var(--labcoat); border-radius: var(--sketch-b); }
 
-/* Copy email + contact links (shared by Contact and the footer) */
+/* the slime button (Open live site, Copy email): a gummy two-tone body with a candy gloss,
+   tapered drips; it jiggles like jelly on hover, a drop lets go, and it squishes when pressed */
+.btn--slime {
+  padding: 0.72em 1.15em 0.86em 0.95em;
+  background: var(--portal);
+  box-shadow: inset 0 -0.3em 0 var(--portal-dark), var(--shadow);
+}
+.btn--slime::before {
+  content: '';
+  position: absolute;
+  top: 0.3em;
+  left: 0.75em;
+  width: 1.5em;
+  height: 0.3em;
+  border-radius: 99px;
+  background: var(--portal-light);
+  rotate: -5deg;
+  pointer-events: none;
+}
+.btn--slime:hover {
+  box-shadow: inset 0 -0.3em 0 var(--portal-dark), 7px 7px 0 var(--ink);
+  animation: jelly 560ms var(--ease-pop);
+}
+.btn--slime:active {
+  box-shadow: inset 0 -0.14em 0 var(--portal-dark), var(--shadow-press);
+  scale: 1.05 0.92;
+  animation: none;
+}
+@keyframes jelly {
+  0% { scale: 1; }
+  28% { scale: 1.07 0.93; }
+  52% { scale: 0.97 1.05; }
+  74% { scale: 1.02 0.99; }
+  100% { scale: 1; }
+}
+.btn__icon { width: 1.3em; height: 1.3em; flex-shrink: 0; }
+/* buttons draw their own shadow, so the focus ring has to be part of it */
+.btn:focus-visible { box-shadow: var(--shadow), 0 0 0 8px var(--mustard); }
+.btn--slime:focus-visible { box-shadow: inset 0 -0.3em 0 var(--portal-dark), var(--shadow), 0 0 0 8px var(--mustard); }
+
+/* Open live site: an on-air light (a soft ring pulses out of it: it's live) and a pocket portal */
+.live-light {
+  position: relative;
+  flex-shrink: 0;
+  width: 0.7em;
+  height: 0.7em;
+  border-radius: 50%;
+  background: var(--mustard);
+  border: 2.5px solid var(--ink);
+}
+.live-light::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  animation: on-air 2.4s ease-out infinite;
+}
+@keyframes on-air {
+  0% { scale: 1; opacity: 0.7; }
+  70%, 100% { scale: 2.1; opacity: 0; }
+}
+.btn__portal { width: 1.55em; height: 1.55em; flex-shrink: 0; margin: -0.2em -0.25em -0.2em 0.1em; transition: rotate var(--t-ui) var(--ease-out); }
+.btn--live:hover .btn__portal { animation: spin 0.9s linear infinite; }
+
+/* Copy email: the clipboard turns into a tick, and a splat of slime bursts out */
 .copy-btn { font-size: 1.125rem; min-width: 9.5em; justify-content: center; }
-.copy-btn[data-copied] { background: var(--labcoat); animation: copied-pop 380ms var(--ease-pop); }
+.copy-btn[data-copied] { background: var(--labcoat); box-shadow: inset 0 -0.3em 0 #c9d4cf, var(--shadow); animation: copied-pop 380ms var(--ease-pop); }
+.copy-btn[data-copied]::before { background: white; }
 @keyframes copied-pop {
   0% { scale: 1; }
   35% { scale: 1.12 0.9; }
   70% { scale: 0.96 1.05; }
   100% { scale: 1; }
 }
+.splat { position: absolute; z-index: 2; left: 50%; top: 50%; pointer-events: none; }
+.splat__bit {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 46% 54% 40% 60% / 52% 40% 60% 48%;
+  background: var(--portal);
+  border: 2px solid var(--ink);
+  translate: -50% -50%;
+  opacity: 0;
+  animation: splat 620ms var(--ease-out) forwards;
+}
+@keyframes splat {
+  0% { opacity: 1; transform: translate(0, 0) scale(0.4); }
+  60% { opacity: 1; transform: translate(var(--x), var(--y)) scale(1); }
+  100% { opacity: 0; transform: translate(calc(var(--x) * 1.15), calc(var(--y) * 1.15 + 14px)) scale(0.7); }
+}
+
+/* contact links (shared by the sign-off and the case pages) */
 .contact-links { display: flex; flex-wrap: wrap; gap: 1rem 1.1rem; margin: 0; padding: 0; list-style: none; }
 .contact-links li:nth-child(1) .contact-links__a { rotate: -1.5deg; }
 .contact-links li:nth-child(2) .contact-links__a { rotate: 1deg; border-radius: var(--sketch-c); }
@@ -134,12 +209,20 @@ button { font: inherit; color: inherit; cursor: pointer; }
 /* goo hanging off a button; drips stretch on hover and squash on press */
 .btn .goo { position: absolute; left: 8%; top: calc(100% - 2px); width: 72%; overflow: visible; pointer-events: none; }
 .goo__drip { transform-origin: 50% 0; transform-box: fill-box; transition: transform var(--t-ui) var(--ease-pop); }
-.btn:hover .goo__drip { transform: scaleY(1.55); }
-.btn:hover .goo__drip:nth-of-type(odd) { transform: scaleY(1.25); }
-.btn:active .goo__drip { transform: scaleY(0.75); transition-duration: 90ms; }
+.btn:hover .goo__drip { transform: scaleY(1.5); }
+.btn:hover .goo__drip:nth-of-type(odd) { transform: scaleY(1.22); }
+.btn:active .goo__drip { transform: scaleY(0.7); transition-duration: 90ms; }
+/* one drop lets go on hover */
+.goo__drop { opacity: 0; transform-box: fill-box; }
+.btn:hover .goo__drop { animation: goo-drop 900ms var(--ease-out) 120ms; }
+@keyframes goo-drop {
+  0% { opacity: 0; transform: translateY(-14px) scale(0.6); }
+  25% { opacity: 1; transform: translateY(-2px) scale(1); }
+  100% { opacity: 0; transform: translateY(26px) scale(0.85); }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  .live-light::after, .splat, .goo__drop { display: none; }
   .boil { animation: none; filter: url(#boil-0); }
-  .jitter { animation: none; }
 }

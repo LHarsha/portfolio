@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Goo } from '../art/Goo.jsx';
+import { ClipboardIcon, Splat } from '../art/ButtonBits.jsx';
 import { BadgeIcon, CodeIcon, SheetIcon } from '../art/Icons.jsx';
 import { blip } from '../lib/sound.js';
 import { person } from '../data/facts.js';
@@ -14,11 +15,14 @@ export const contactLinks = [
 
 export function CopyEmailButton({ className = '' }) {
   const [copied, setCopied] = useState(false);
+  // a fresh key per copy, so the splat bursts again on every click
+  const [shot, setShot] = useState(0);
 
   async function copy() {
     try {
       await navigator.clipboard.writeText(person.email);
       setCopied(true);
+      setShot((n) => n + 1);
       blip(780);
       setTimeout(() => setCopied(false), 2400);
     } catch {
@@ -28,8 +32,10 @@ export function CopyEmailButton({ className = '' }) {
 
   return (
     <>
-      <button type="button" className={`btn copy-btn ${className}`} onClick={copy} data-copied={copied || undefined}>
-        {copied ? 'Email copied' : 'Copy email'}
+      <button type="button" className={`btn btn--slime copy-btn ${className}`} onClick={copy} data-copied={copied || undefined}>
+        <ClipboardIcon done={copied} />
+        <span>{copied ? 'Email copied' : 'Copy email'}</span>
+        {copied && <Splat key={shot} />}
         <Goo />
       </button>
       <span className="visually-hidden" aria-live="polite">

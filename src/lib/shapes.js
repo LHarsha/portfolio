@@ -44,6 +44,21 @@ export function dripPath(x, w, len) {
   return `M${f(x - w)} 0L${f(x - w * 0.8)} ${f(len - w)}A${f(w)} ${f(w)} 0 0 0 ${f(x + w)} ${f(len - w)}L${f(x + w * 0.9)} 0Z`;
 }
 
+// A tapered drip from y=top: wide where it leaves the surface, a thin neck, a round bulb at the end.
+export function taperedDrip(x, w, len, top = 0) {
+  const n = w * 0.36;
+  const r = w * 0.66;
+  const cy = top + len - r;
+  const ny = cy - Math.sqrt(r * r - n * n);
+  const k = (ny - top) * 0.5;
+  return `M${f(x - w)} ${f(top)}C${f(x - w)} ${f(top + k)} ${f(x - n)} ${f(ny - k * 0.7)} ${f(x - n)} ${f(ny)}A${f(r)} ${f(r)} 0 1 0 ${f(x + n)} ${f(ny)}C${f(x + n)} ${f(ny - k * 0.7)} ${f(x + w)} ${f(top + k)} ${f(x + w)} ${f(top)}Z`;
+}
+
+// A falling drop, point up, from y=top.
+export function fallingDrop(x, r, top) {
+  return `M${f(x)} ${f(top)}Q${f(x + r * 1.1)} ${f(top + r * 1.5)} ${f(x)} ${f(top + r * 2.3)}Q${f(x - r * 1.1)} ${f(top + r * 1.5)} ${f(x)} ${f(top)}Z`;
+}
+
 // 4-point cartoon sparkle centred on (x, y).
 export function sparklePath(x, y, s) {
   const k = s * 0.22;

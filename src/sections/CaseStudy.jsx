@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Frame } from '../shell/Frame.jsx';
-import { Goo } from '../art/Goo.jsx';
+import { LiveButton } from '../shell/LiveButton.jsx';
 import { Tv } from '../art/Tv.jsx';
 import { person, projects } from '../data/facts.js';
 import { shots } from '../data/shots.js';
@@ -67,10 +67,7 @@ export function CaseStudy({ slug }) {
           <p className="case__lead">{p.summary}</p>
           <div className="case__actions">
             {p.live && (
-              <a className="btn" href={p.live} target="_blank" rel="noreferrer">
-                Open live site
-                <Goo />
-              </a>
+              <LiveButton href={p.live} />
             )}
             {p.repo && (
               <a className="btn btn--plain" href={p.repo} target="_blank" rel="noreferrer">

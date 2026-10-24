@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { GooEdge } from '../art/GooEdge.jsx';
+import { Drift } from '../art/Drift.jsx';
 import { Flood, pour } from '../art/Flood.jsx';
 import { useScene } from '../lib/story.js';
 import { toolkit } from '../data/facts.js';
@@ -70,6 +71,7 @@ export function Toolkit() {
     <section id="toolkit" className="toolkit scene" data-scene ref={root} aria-labelledby="toolkit-title">
       <Flood color="var(--portal-light)" />
       <GooEdge from="lab-log" />
+      <Drift seed={19} corner="br" />
       <h2 id="toolkit-title" className="toolkit__title" data-depth style={{ '--depth': -0.15 }}>Toolkit</h2>
       <div className="board" data-exit>
         {groups.map(([group, items], gi) => (

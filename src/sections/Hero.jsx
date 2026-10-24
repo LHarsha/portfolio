@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Portal, holeShape } from '../art/Portal.jsx';
 import { Arrow } from '../art/Arrow.jsx';
+import { Drift } from '../art/Drift.jsx';
 import { blobPath, sparklePath } from '../lib/shapes.js';
 import { rng } from '../lib/rng.js';
 import { whoosh } from '../lib/sound.js';
@@ -119,6 +120,7 @@ export function Hero({ onDarkChange }) {
 
   return (
     <section id="hero" className="hero scene" data-scene ref={root} aria-labelledby="hero-name">
+      <Drift seed={3} corner="br" count={6} />
       <div className="hero__stage">
         <div className="hero__copy">
           <h1 id="hero-name" className="hero__name">

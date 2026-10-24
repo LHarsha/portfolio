@@ -4,7 +4,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { labLog } from '../data/facts.js';
 import { GooEdge } from '../art/GooEdge.jsx';
+import { Drift } from '../art/Drift.jsx';
 import { useScene } from '../lib/story.js';
+import { tipsy } from '../art/Flood.jsx';
 import { rng } from '../lib/rng.js';
 import './lablog.css';
 
@@ -61,8 +63,10 @@ export function LabLog() {
       tl.fromTo(q('.log__rosette'), { scale: 0, rotate: -40 }, { scale: 1, rotate: -8, duration: 0.15, ease: 'back.out(2.5)', transformOrigin: '50% 40%' }, 0.45 + entries.length * step)
         .addLabel('settle', tl.duration())
         .to({}, { duration: 0.15 }, tl.duration());
-      // exit: the sheet slides up as the Toolkit pours in
-      tl.to(q('.log__sheet'), { y: -50, duration: exit }, tl.duration());
+      // exit: the sheet slides up and sways as the Toolkit pours in
+      const x = tl.duration();
+      tl.to(q('.log__sheet'), { y: -50, duration: exit }, x);
+      tipsy(tl, q('.log__sheet'), x, exit);
     },
   });
 
@@ -87,6 +91,7 @@ export function LabLog() {
   return (
     <section id="lab-log" className="log scene" data-scene ref={root} aria-labelledby="log-title">
       <GooEdge from="work" />
+      <Drift seed={17} corner="tr" />
       <div className="log__sheet" data-exit>
         <h2 id="log-title" className="log__title">Lab log</h2>
         <div className="log__years">

@@ -1,7 +1,7 @@
 // Interest doodles: flat fills, ink outline, one shadow tone each.
 export function Guitar({ className = '' }) {
   return (
-    <svg className={`doodle jitter ${className}`} viewBox="0 0 120 200" aria-hidden="true" focusable="false">
+    <svg className={`doodle ${className}`} viewBox="0 0 120 200" aria-hidden="true" focusable="false">
       {/* neck and head */}
       <path d="M54 16L66 14L68 100L56 101Z" fill="var(--garage-dark)" stroke="var(--ink)" strokeWidth="4" strokeLinejoin="round" />
       <path d="M50 6C56 2 66 2 72 6L70 22L52 23Z" fill="var(--garage-dark)" stroke="var(--ink)" strokeWidth="4" strokeLinejoin="round" />
@@ -18,7 +18,7 @@ export function Guitar({ className = '' }) {
 
 export function Dumbbell({ className = '' }) {
   return (
-    <svg className={`doodle jitter ${className}`} viewBox="0 0 200 100" aria-hidden="true" focusable="false">
+    <svg className={`doodle ${className}`} viewBox="0 0 200 100" aria-hidden="true" focusable="false">
       <path d="M52 44L148 42L148 56L52 58Z" fill="var(--labcoat)" stroke="var(--ink)" strokeWidth="4" strokeLinejoin="round" />
       {[
         'M18 30C18 22 24 20 32 20L46 20C52 20 54 24 54 30L54 72C54 78 50 80 44 80L30 80C22 80 18 76 18 70Z',

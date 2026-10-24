@@ -5,6 +5,8 @@ import { useGSAP } from '@gsap/react';
 import { Charminar } from '../art/Charminar.jsx';
 import { Guitar, Dumbbell } from '../art/Doodles.jsx';
 import { GooEdge } from '../art/GooEdge.jsx';
+import { Drift } from '../art/Drift.jsx';
+import { tipsy } from '../art/Flood.jsx';
 import { useScene } from '../lib/story.js';
 import { person } from '../data/facts.js';
 import './hyderabad.css';
@@ -37,8 +39,10 @@ export function Hyderabad() {
       tl.fromTo(q('.hyd__text'), { opacity: 0.15 }, { opacity: 1, duration: 0.3 }, 0.8)
         .addLabel('settle', 1.0)
         .to({}, { duration: 0.2 }, 1.1);
-      // exit: the city drifts up as Work pours in over it
-      tl.to(q('.hyd__inner'), { y: -50, duration: exit }, tl.duration());
+      // exit: the city drifts up and sways as Work pours in over it
+      const x = tl.duration();
+      tl.to(q('.hyd__inner'), { y: -50, duration: exit }, x);
+      tipsy(tl, q('.hyd__inner'), x, exit);
     },
   });
 
@@ -56,6 +60,7 @@ export function Hyderabad() {
   return (
     <section id="hyderabad" className="hyd scene" data-scene ref={root} aria-labelledby="hyd-title">
       <GooEdge color="var(--space)" />
+      <Drift seed={13} corner="tr" />
       <div className="hyd__inner" data-exit>
         <div className="hyd__copy">
           <h2 id="hyd-title" className="hyd__title" aria-label={title.join(' ')}>

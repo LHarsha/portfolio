@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { GooEdge } from '../art/GooEdge.jsx';
+import { Drift } from '../art/Drift.jsx';
 import { CopyEmailButton, ContactLinks } from '../shell/ContactBits.jsx';
 import { useScene } from '../lib/story.js';
 import { scrollToY } from '../lib/smoothScroll.js';
@@ -65,12 +66,13 @@ export function Footer({ reduced }) {
   return (
     <section id="contact" className="end scene" data-scene ref={root} aria-labelledby="end-title">
       <GooEdge from="toolkit" />
+      <Drift seed={21} corner="tl" tone="light" />
       <span className="end__dot" aria-hidden="true" />
 
       <p className="end__note end__item">End of transmission.</p>
       <h2 id="end-title" className="end__title end__item">Still here? Say hi.</h2>
       <p className="end__line end__item">
-        I'm open to internships in AI/ML and software, and to freelance work. My inbox is the fastest portal.
+        I'm open to internships and freelance work. My inbox is the fastest portal.
       </p>
 
       <a className="end__email end__item" href={`mailto:${person.email}`}>

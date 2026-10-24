@@ -3,8 +3,9 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Tv, Bench, SCREEN } from '../art/Tv.jsx';
-import { Goo } from '../art/Goo.jsx';
+import { LiveButton } from '../shell/LiveButton.jsx';
 import { GooEdge } from '../art/GooEdge.jsx';
+import { Drift } from '../art/Drift.jsx';
 import { Flood, pour } from '../art/Flood.jsx';
 import { jumpToStage, useScene } from '../lib/story.js';
 import { blip } from '../lib/sound.js';
@@ -129,6 +130,7 @@ export function Work() {
     <section id="work" className="work scene" data-scene ref={root} aria-labelledby="work-title">
       <Flood color="var(--garage)" />
       <GooEdge from="hyderabad" />
+      <Drift seed={15} corner="br" />
       <div className="work__scene">
         <h2 id="work-title" className="work__title">Things I've built</h2>
 
@@ -173,10 +175,7 @@ export function Work() {
           {(p.live || p.stack.length > 0) && (
             <div className="work__actions">
               {p.live && (
-                <a className="btn" href={p.live} target="_blank" rel="noreferrer">
-                  Open live site
-                  <Goo />
-                </a>
+                <LiveButton href={p.live} />
               )}
               <a className="btn btn--plain" href={`/work/${p.slug}`}>
                 Read the case study
