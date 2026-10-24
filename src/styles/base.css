@@ -84,6 +84,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .btn:active { transform: translate(3px, 3px); box-shadow: var(--shadow-press); transition-duration: 90ms; }
 .btn--plain { background: var(--labcoat); border-radius: var(--sketch-b); }
 
+/* goo hanging off a button; drips stretch on hover and squash on press */
+.btn .goo { position: absolute; left: 8%; top: calc(100% - 2px); width: 72%; overflow: visible; pointer-events: none; }
+.goo__drip { transform-origin: 50% 0; transform-box: fill-box; transition: transform var(--t-ui) var(--ease-pop); }
+.btn:hover .goo__drip { transform: scaleY(1.55); }
+.btn:hover .goo__drip:nth-of-type(odd) { transform: scaleY(1.25); }
+.btn:active .goo__drip { transform: scaleY(0.75); transition-duration: 90ms; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
   .boil { animation: none; filter: url(#boil-0); }

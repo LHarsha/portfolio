@@ -74,11 +74,6 @@
   transform: rotate(-3deg);
 }
 
-.btn .goo { position: absolute; left: 8%; top: calc(100% - 2px); width: 72%; overflow: visible; pointer-events: none; }
-.goo__drip { transform-origin: 50% 0; transform-box: fill-box; transition: transform var(--t-ui) var(--ease-pop); }
-.btn:hover .goo__drip { transform: scaleY(1.55); }
-.btn:hover .goo__drip:nth-of-type(odd) { transform: scaleY(1.25); }
-.btn:active .goo__drip { transform: scaleY(0.75); transition-duration: 90ms; }
 
 .parts__col--notes { justify-items: center; }
 .sticky {
