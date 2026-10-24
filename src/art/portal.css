@@ -1,0 +1,3 @@
+.portal { overflow: visible; }
+.portal__arms { animation: spin 16s linear infinite; transform-origin: 0 0; }
+@media (prefers-reduced-motion: reduce) { .portal__arms { animation: none; } }

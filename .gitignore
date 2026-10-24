@@ -1,0 +1,7 @@
+node_modules
+dist
+.DS_Store
+.playwright-mcp/
+review/
+.claude/skills/impeccable/scripts/bin/
+.claude/settings.local.json
