@@ -1,5 +1,11 @@
-:root { --frame: 10px; --inset: calc(var(--frame) + clamp(0.75rem, 0.4rem + 1.2vw, 1.5rem)); }
-@media (max-width: 700px) { :root { --frame: 6px; } }
+:root {
+  --frame: 10px;
+  --inset: calc(var(--frame) + clamp(0.75rem, 0.4rem + 1.2vw, 1.5rem));
+  --dial-h: 52px;
+  /* what a scene keeps free at the bottom so nothing sits behind the chapter dial */
+  --dial-clear: calc(var(--inset) + var(--dial-h) + 1.5rem);
+}
+@media (max-width: 700px) { :root { --frame: 6px; --dial-h: 40px; } }
 
 /* ---------- frame ---------- */
 .frame {
@@ -151,7 +157,7 @@
 .dial__tape {
   position: relative;
   flex: 1;
-  height: 52px;
+  height: var(--dial-h);
   background: var(--mustard);
   transition: background-color var(--t-ui) var(--ease-out);
   border: var(--line) solid var(--ink);
@@ -235,7 +241,6 @@
   .hdr__sound { flex-shrink: 0; padding: 0.3em 0.4em; }
   .hdr__sound-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
-  .dial__tape { height: 40px; }
   .dial__labels { display: none; }
   .dial__now {
     display: grid;

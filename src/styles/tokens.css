@@ -18,8 +18,8 @@
   --font-body: 'Rethink Sans', system-ui, sans-serif;
   --font-hand: 'Gochi Hand', 'Rethink Sans', cursive;
 
-  --step-display: clamp(4rem, 2.2rem + 9vw, 12.5rem);
-  --step-h2: clamp(2.5rem, 1.6rem + 4.5vw, 6rem);
+  --step-display: clamp(4rem, 2.2rem + min(9vw, 14svh), 12.5rem);
+  --step-h2: clamp(2.25rem, 1.6rem + min(4.5vw, 7.5svh), 6rem);
   --step-h3: clamp(1.5rem, 1.25rem + 1vw, 2.25rem);
   --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
   --step-small: 0.875rem;

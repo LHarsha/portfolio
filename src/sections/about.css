@@ -20,7 +20,7 @@
   position: absolute;
   top: calc(var(--inset) + 1.5rem);
   left: 50%;
-  width: clamp(90px, 9vw, 140px);
+  width: clamp(72px, min(9vw, 14svh), 140px);
   aspect-ratio: 1;
   translate: -50% 0;
 }
@@ -34,7 +34,7 @@
   justify-content: center;
   column-gap: 0.28em;
   font-family: var(--font-display);
-  font-size: clamp(3.2rem, 1rem + 7.6vw, 9.5rem);
+  font-size: clamp(3.2rem, 1rem + min(7.6vw, 12svh), 9.5rem);
   line-height: 0.95;
   text-align: center;
 }
@@ -118,6 +118,12 @@
   .about__landing { top: 10svh; }
   .about__more { grid-template-columns: 1fr; padding-top: 1.5rem; padding-bottom: calc(var(--inset) + 6rem); }
   .about__hobbies { justify-content: flex-start; }
+}
+
+@media (min-width: 768px) and (max-height: 820px) {
+  /* the title starts below the portal it drops out of */
+  .about__title { font-size: clamp(2.6rem, 1rem + min(7.6vw, 10svh), 9.5rem); }
+  .about__scene { gap: clamp(0.75rem, 2.5svh, 2rem); padding-top: calc(var(--inset) + 2.25rem + min(9vw, 14svh)); padding-bottom: var(--dial-clear); }
 }
 
 @media (prefers-reduced-motion: reduce) {
