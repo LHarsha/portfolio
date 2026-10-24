@@ -3,24 +3,18 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { statements } from '../data/facts.js';
+import { GooEdge } from '../art/GooEdge.jsx';
 import { rng } from '../lib/rng.js';
 import './words.css';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-// Three pinned scenes, one per statement, each with one trick on its key word.
+// Three scenes, one per statement, each with one trick on its key word.
 // Markup is the finished state; tricks run from a rough start state only when motion is allowed.
-const MOTION = {
-  desktop: '(min-width: 768px) and (prefers-reduced-motion: no-preference)',
-  phone: '(max-width: 767px) and (prefers-reduced-motion: no-preference)',
-};
-// Desktop: short pins, so three statements in a row don't cost a skimming recruiter six screens.
-// Phone: no pins at all (each pin costs startup time on a phone); the trick plays as the scene
-// scrolls into view instead.
-const pin = (scene, desktop) =>
-  desktop
-    ? { trigger: scene, start: 'top top', end: '+=55%', pin: true, scrub: 0.5 }
-    : { trigger: scene, start: 'top 75%', end: 'top 10%', scrub: 0.5 };
+const MOTION = '(prefers-reduced-motion: no-preference)';
+// No pins: the page never stops. Each trick plays across the whole slide-in, from the moment the
+// scene appears, and is done just before it reaches the top.
+const play = (scene) => ({ trigger: scene, start: 'top 95%', end: 'top 5%', scrub: 0.5 });
 
 /* ---------- 1. working: a rough v0.1 straightens into v1.0 ---------- */
 const tilts = [-14, 9, -7, 12, -9, 6, -12];
@@ -34,7 +28,7 @@ function Working() {
     () => {
       const q = gsap.utils.selector(root);
       const tag = q('.working__tag')[0];
-      gsap.matchMedia().add(MOTION, (ctx) => {
+      gsap.matchMedia().add(MOTION, () => {
         const versions = ['v0.1', 'v0.4', 'v0.7', 'v1.0'];
         const setTag = (p) => {
           const v = versions[Math.min(versions.length - 1, Math.floor(p * versions.length))];
@@ -43,7 +37,7 @@ function Working() {
         };
         setTag(0);
         gsap
-          .timeline({ defaults: { ease: 'none' }, scrollTrigger: { ...pin(root.current, ctx.conditions.desktop), onUpdate: (st) => setTag(st.progress / 0.7) } })
+          .timeline({ defaults: { ease: 'none' }, scrollTrigger: { ...play(root.current), onUpdate: (st) => setTag(st.progress / 0.7) } })
           .fromTo(q('.working__tape'), { scaleX: 1, rotate: -7, autoAlpha: 1 }, { scaleX: 0, rotate: -20, autoAlpha: 0, transformOrigin: '100% 50%', duration: 0.25, ease: 'power2.in' }, 0)
           .fromTo(
             q('.working__char'),
@@ -52,6 +46,17 @@ function Working() {
             0.15,
           )
           .to({}, { duration: 0.3 });
+        // "...then keep improving it": as the statement scrolls away, the tag keeps going past v1.0
+        const later = ['v1.0', 'v1.1', 'v1.2', 'v1.3'];
+        ScrollTrigger.create({
+          trigger: root.current,
+          start: 'top top',
+          end: 'bottom top',
+          onUpdate: (st) => {
+            const v = later[Math.min(later.length - 1, Math.floor(st.progress * later.length))];
+            if (tag.textContent !== v) tag.textContent = v;
+          },
+        });
         return () => setTag(1);
       });
     },
@@ -60,7 +65,8 @@ function Working() {
 
   return (
     <section id="words" className="words words--working" ref={root} aria-labelledby="working-title">
-      <div className="words__inner">
+      <GooEdge from="about" />
+      <div className="words__inner" data-exit>
         <h2 id="working-title" className="words__head">
           {s.lead}
           <span className="working__key">
@@ -78,7 +84,7 @@ function Working() {
           </span>
           {s.tail}
         </h2>
-        <p className="words__more">{s.more}</p>
+        <p className="words__more" data-depth style={{ '--depth': 0.18 }}>{s.more}</p>
       </div>
     </section>
   );
@@ -92,9 +98,9 @@ function Useful() {
   useGSAP(
     () => {
       const q = gsap.utils.selector(root);
-      gsap.matchMedia().add(MOTION, (ctx) => {
+      gsap.matchMedia().add(MOTION, () => {
         gsap
-          .timeline({ defaults: { ease: 'none' }, scrollTrigger: pin(root.current, ctx.conditions.desktop) })
+          .timeline({ defaults: { ease: 'none' }, scrollTrigger: play(root.current) })
           .fromTo(q('.useful__loop path'), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.5, ease: 'power1.inOut' }, 0.05)
           .to({}, { duration: 0.35 });
       });
@@ -104,7 +110,8 @@ function Useful() {
 
   return (
     <section id="words-2" className="words words--useful" ref={root} aria-labelledby="useful-title">
-      <div className="words__inner">
+      <GooEdge from="words" />
+      <div className="words__inner" data-exit>
         <h2 id="useful-title" className="words__head">
           <span className="words__line">
             {s.line1[0]}
@@ -125,7 +132,7 @@ function Useful() {
             {s.line2[2]}
           </span>
         </h2>
-        <p className="words__more">{s.more}</p>
+        <p className="words__more" data-depth style={{ '--depth': 0.18 }}>{s.more}</p>
       </div>
     </section>
   );
@@ -162,12 +169,12 @@ function Easier() {
     () => {
       const q = gsap.utils.selector(root);
       const line = q('.easier__line')[0];
-      gsap.matchMedia().add(MOTION, (ctx) => {
+      gsap.matchMedia().add(MOTION, () => {
         const state = { k: 0 };
         const draw = () => line.setAttribute('d', scribble(state.k));
         draw();
         gsap
-          .timeline({ defaults: { ease: 'none' }, scrollTrigger: pin(root.current, ctx.conditions.desktop) })
+          .timeline({ defaults: { ease: 'none' }, scrollTrigger: play(root.current) })
           .fromTo(state, { k: 0 }, { k: 1, duration: 0.6, ease: 'power2.inOut', onUpdate: draw }, 0.05)
           .to({}, { duration: 0.35 });
         return () => line.setAttribute('d', straightPath);
@@ -178,7 +185,8 @@ function Easier() {
 
   return (
     <section id="words-3" className="words words--easier" ref={root} aria-labelledby="easier-title">
-      <div className="words__inner">
+      <GooEdge from="words-2" />
+      <div className="words__inner" data-exit>
         <h2 id="easier-title" className="words__head">
           {s.lead}
           <span className="easier__key">
@@ -189,7 +197,7 @@ function Easier() {
           </span>
           {s.tail}
         </h2>
-        <p className="words__more">{s.more}</p>
+        <p className="words__more" data-depth style={{ '--depth': 0.18 }}>{s.more}</p>
       </div>
     </section>
   );

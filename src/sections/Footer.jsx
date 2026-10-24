@@ -20,11 +20,6 @@ export function Footer({ onJump }) {
     () => {
       gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
         gsap.fromTo(
-          root.current.querySelectorAll('.goo-edge__drip'),
-          { scaleY: 0.5 },
-          { scaleY: 1.2, transformOrigin: '50% 0%', ease: 'none', stagger: { each: 0.03, from: 'random' }, scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'top 20%', scrub: 0.8 } },
-        );
-        gsap.fromTo(
           root.current.querySelector('.end__portal'),
           { scale: 0.08, rotate: -120 },
           { scale: 1, rotate: 0, ease: 'power2.out', scrollTrigger: { trigger: root.current, start: 'top 85%', end: 'top 10%', scrub: 0.6 } },
@@ -36,7 +31,7 @@ export function Footer({ onJump }) {
 
   return (
     <footer id="the-end" className="end" ref={root} aria-labelledby="end-title">
-      <GooEdge color="var(--portal-light)" />
+      <GooEdge from="toolkit" />
       <div className="end__portal">
         <Portal />
       </div>

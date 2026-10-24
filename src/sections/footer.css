@@ -5,7 +5,7 @@
   justify-items: center;
   align-content: center;
   gap: clamp(1rem, 0.6rem + 1.4vw, 1.75rem);
-  padding: calc(var(--inset) + 5rem) calc(var(--inset) + 3vw) calc(var(--inset) + 6.5rem);
+  padding: calc(var(--inset) + 5rem) calc(var(--inset) + 3vw) var(--dial-clear);
   background: var(--space);
   color: var(--labcoat);
   text-align: center;
@@ -26,7 +26,7 @@
 }
 .end > *:not(.goo-edge) { position: relative; }
 
-.end__portal { width: clamp(150px, 26vh, 280px); margin-bottom: 0.5rem; }
+.end__portal { width: clamp(110px, 22svh, 260px); margin-bottom: 0.25rem; }
 
 .end__title { font-family: var(--font-display); font-size: var(--step-h2); }
 .end__line { max-width: 46ch; font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.3rem); }
@@ -51,7 +51,7 @@
   justify-content: center;
   align-items: flex-start;
   gap: 1rem 1.25rem;
-  padding-bottom: 2rem;
+  padding-bottom: 1.25rem;
   color: var(--ink);
 }
 
@@ -63,11 +63,34 @@
   text-underline-offset: 0.25em;
 }
 
-.end__small { display: grid; gap: 0.2rem; margin-top: 1rem; font-size: var(--step-small); opacity: 0.85; }
+.end__small { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.2rem 1.5rem; margin-top: 0.5rem; font-size: var(--step-small); opacity: 0.85; }
+
+/* short screens: everything from the portal to the small print fits above the dial when you land here */
+@media (min-width: 768px) and (max-height: 960px) {
+  .end { gap: 0.6rem; padding-top: calc(clamp(70px, 9vw, 110px) + 0.5rem); }
+  .end__portal { width: clamp(64px, 13svh, 150px); }
+  .end__title { font-size: clamp(2rem, 0.75rem + 6svh, 4rem); }
+  .end__line { max-width: 64ch; }
+  .end__email { font-size: clamp(1.4rem, 0.4rem + 5.5svh, 3rem); }
+  .end__actions { padding-bottom: 1rem; }
+  .end__small { margin-top: 0; }
+}
+/* very short: the way back and the small print share a line */
+@media (min-width: 768px) and (max-height: 680px) {
+  .end { gap: 0.45rem; }
+  .end__portal { width: clamp(56px, 11svh, 120px); }
+  .end__again { font-size: 1.15rem; }
+  .end__line { font-size: 1rem; }
+}
 
 @media (max-width: 767px) {
   .end { padding: calc(var(--inset) + 4.5rem) calc(var(--inset) + 0.5rem) calc(var(--inset) + 6rem); }
   .end__portal { width: 140px; }
   .end__actions { flex-direction: column; align-items: center; }
   .end .contact-links { justify-content: center; }
+}
+
+@media (min-width: 768px) and (max-height: 620px) {
+  .end { gap: 0.35rem; }
+  .end__line { font-size: 0.95rem; line-height: 1.35; }
 }

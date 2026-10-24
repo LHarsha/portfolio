@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { labLog } from '../data/facts.js';
+import { GooEdge } from '../art/GooEdge.jsx';
 import { rng } from '../lib/rng.js';
 import './lablog.css';
 
@@ -45,15 +46,15 @@ export function LabLog() {
     () => {
       const q = gsap.utils.selector(root);
       const mm = gsap.matchMedia();
-      // desktop: the whole sheet fits, so pin it briefly and tick through in order
+      // no pins, so the page never stops.
+      // desktop: the whole sheet fits, so the ticks run in order as it scrolls in, all done when it arrives
       mm.add('(min-width: 768px) and (prefers-reduced-motion: no-preference)', () => {
         gsap
-          .timeline({ scrollTrigger: { trigger: q('.log__sheet')[0], start: 'top top', end: '+=90%', pin: true, scrub: 0.5 } })
+          .timeline({ scrollTrigger: { trigger: q('.log__sheet')[0], start: 'top 90%', end: 'top 5%', scrub: 0.5 } })
           .fromTo(q('.log__tick'), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.1, stagger: 0.09, ease: 'power1.out' })
-          .fromTo(q('.log__rosette'), { scale: 0, rotate: -40 }, { scale: 1, rotate: -8, duration: 0.15, ease: 'back.out(2.5)', transformOrigin: '50% 40%' })
-          .to({}, { duration: 0.2 });
+          .fromTo(q('.log__rosette'), { scale: 0, rotate: -40 }, { scale: 1, rotate: -8, duration: 0.15, ease: 'back.out(2.5)', transformOrigin: '50% 40%' });
       });
-      // phone: the list is taller than the screen, so no pin; each tick draws as its entry arrives
+      // phone: the list is taller than the screen, so each tick draws as its entry scrolls up
       mm.add('(max-width: 767px) and (prefers-reduced-motion: no-preference)', () => {
         q('.log__entry').forEach((entry) => {
           const st = { trigger: entry, start: 'top 82%', end: 'top 60%', scrub: 0.5 };
@@ -69,7 +70,8 @@ export function LabLog() {
   let seed = 40;
   return (
     <section id="lab-log" className="log" ref={root} aria-labelledby="log-title">
-      <div className="log__sheet">
+      <GooEdge from="work" />
+      <div className="log__sheet" data-exit>
         <h2 id="log-title" className="log__title">Lab log</h2>
         <div className="log__years">
           {labLog.map((group) => (

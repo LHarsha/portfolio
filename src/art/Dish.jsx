@@ -1,7 +1,7 @@
 // A garage-built satellite dish on a wobbly tripod, beaming at whatever is up and to its left.
-export function Dish({ className = '' }) {
+export function Dish({ className = '', ...rest }) {
   return (
-    <svg className={`dish jitter ${className}`} viewBox="0 0 240 250" aria-hidden="true" focusable="false">
+    <svg className={`dish jitter ${className}`} viewBox="0 0 240 250" aria-hidden="true" focusable="false" {...rest}>
       <g className="dish__signal boil" fill="none" stroke="var(--ink)" strokeWidth="4" strokeLinecap="round">
         <path d="M62 64C50 52 46 38 50 24" />
         <path d="M44 76C26 60 20 38 28 14" />

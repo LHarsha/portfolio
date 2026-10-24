@@ -14,9 +14,9 @@ function Minaret({ x }) {
   );
 }
 
-export function Charminar({ className = '' }) {
+export function Charminar({ className = '', ...rest }) {
   return (
-    <svg className={`charminar jitter ${className}`} viewBox="0 0 300 262" aria-hidden="true" focusable="false">
+    <svg className={`charminar jitter ${className}`} viewBox="0 0 300 262" aria-hidden="true" focusable="false" {...rest}>
       {/* main block with the big arch */}
       <path d="M58 252L60 124L242 122L244 252L194 252C194 212 182 176 151 168C120 176 108 212 107 252Z" fill="var(--labcoat)" stroke="var(--ink)" strokeWidth="4" strokeLinejoin="round" />
       <path d="M194 252C194 212 182 176 151 168C170 180 178 210 178 252Z" fill="#c9d4cf" />

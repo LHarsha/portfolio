@@ -63,9 +63,10 @@ export function Hero({ onDarkChange }) {
             scrollTrigger: {
               trigger: root.current,
               start: 'top top',
-              end: desktop ? '+=130%' : '+=100%',
+              // one of only two pins on the page, kept short so the scroll barely stops
+              end: desktop ? '+=85%' : '+=70%',
               pin: true,
-              scrub: 0.6,
+              scrub: 0.4,
               invalidateOnRefresh: true,
               onUpdate(self) {
                 // hold the rim's boil still mid-dive; it's all scaled up and moving anyway
@@ -83,7 +84,7 @@ export function Hero({ onDarkChange }) {
 
           // 1. the copy steps aside while the portal slides to the middle of the screen
           // 2. the portal grows and spins up; its starry core opens into the hole that swallows the view
-          // 3. the caption lands while the stars settle, with a short hold so it can be read
+          // 3. the caption lands while the stars settle, with a beat to read it
           tl.to(q('.hero__name, .hero__role, .hero__sticky, .hero__sticky-arrow'), { yPercent: -40, autoAlpha: 0, duration: 0.18, stagger: 0.02 }, 0)
             .to(q('.hero__cue'), { autoAlpha: 0, duration: 0.08 }, 0)
             .to(portal, { x: toCentre('x'), y: toCentre('y'), scale: 1.25, duration: 0.3, ease: 'power1.inOut' }, 0)
@@ -92,7 +93,7 @@ export function Hero({ onDarkChange }) {
             .fromTo(hole, { s: 0 }, { s: cover, duration: 0.36, ease: 'power3.in', onUpdate: drawHole }, 0.32)
             .fromTo(q('.dive__stars'), { scale: 1.25 }, { scale: 1, transformOrigin: '50% 50%', duration: 0.3 }, 0.6)
             .fromTo(q('.dive__caption'), { autoAlpha: 0, y: 30, rotate: -6 }, { autoAlpha: 1, y: 0, rotate: -2, duration: 0.14, ease: 'back.out(1.7)' }, 0.66)
-            .to({}, { duration: 0.2 });
+            .to({}, { duration: 0.08 });
 
           return () => {
             ScrollTrigger.removeEventListener('refreshInit', resize);

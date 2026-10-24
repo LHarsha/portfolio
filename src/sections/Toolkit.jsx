@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { GooEdge } from '../art/GooEdge.jsx';
 import { toolkit } from '../data/facts.js';
 import { rng } from '../lib/rng.js';
 import './toolkit.css';
@@ -44,8 +45,9 @@ export function Toolkit() {
   let t = 0;
   return (
     <section id="toolkit" className="toolkit" ref={root} aria-labelledby="toolkit-title">
-      <h2 id="toolkit-title" className="toolkit__title">Toolkit</h2>
-      <div className="board">
+      <GooEdge from="lab-log" />
+      <h2 id="toolkit-title" className="toolkit__title" data-depth style={{ '--depth': -0.15 }}>Toolkit</h2>
+      <div className="board" data-exit>
         {groups.map(([group, items], gi) => (
           <section key={group} className="board__group" aria-labelledby={`tk-${gi}`}>
             <h3 id={`tk-${gi}`} className="board__tape">{group}</h3>

@@ -16,6 +16,7 @@ import { Footer } from './sections/Footer.jsx';
 import { chapters } from './data/chapters.js';
 import { pauseBoilOffscreen, useReducedMotion } from './lib/motion.js';
 import { useChapterScroll, jumpTo } from './lib/useChapterScroll.js';
+import { startSmoothScroll } from './lib/smoothScroll.js';
 import { blip, setSound, soundEnabled } from './lib/sound.js';
 import './shell/shell.css';
 
@@ -55,6 +56,7 @@ function Site() {
   );
 
   useEffect(() => pauseBoilOffscreen(), []);
+  useEffect(() => (reduced ? undefined : startSmoothScroll()), [reduced]);
   // Pins are measured with fallback fonts first; re-measure once the real ones are in. Then honour
   // a #chapter in the URL (e.g. "Back to the TV" from a case study), which the browser tried to
   // jump to before the pins existed.

@@ -4,8 +4,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Tv, Bench, SCREEN } from '../art/Tv.jsx';
 import { Goo } from '../art/Goo.jsx';
+import { GooEdge } from '../art/GooEdge.jsx';
 import { blip } from '../lib/sound.js';
 import { prefersReducedMotion, useReducedMotion } from '../lib/motion.js';
+import { scrollToY } from '../lib/smoothScroll.js';
 import { projects } from '../data/facts.js';
 import { shots } from '../data/shots.js';
 import './work.css';
@@ -83,7 +85,8 @@ export function Work() {
           trigger.current = ScrollTrigger.create({
             trigger: scene,
             start: 'top top',
-            end: ctx.conditions.desktop ? '+=240%' : '+=160%',
+            // the page's other pin: about a third of a screen per channel, so it never feels stuck
+            end: ctx.conditions.desktop ? '+=140%' : '+=110%',
             pin: true,
             onUpdate: (self) => tune(Math.min(n - 1, Math.floor(self.progress * n))),
           });
@@ -99,7 +102,7 @@ export function Work() {
   // With the scroll scene running, a button scrolls to that channel's stretch; otherwise it just tunes.
   const choose = (i) => {
     const st = trigger.current;
-    if (st) window.scrollTo({ top: st.start + (st.end - st.start) * ((i + 0.5) / n), behavior: reduced ? 'auto' : 'smooth' });
+    if (st) scrollToY(st.start + (st.end - st.start) * ((i + 0.5) / n), !reduced);
     else tune(i);
   };
 
@@ -107,6 +110,7 @@ export function Work() {
 
   return (
     <section id="work" className="work" ref={root} aria-labelledby="work-title">
+      <GooEdge from="words-3" />
       <div className="work__scene">
         <h2 id="work-title" className="work__title">Things I've built</h2>
 

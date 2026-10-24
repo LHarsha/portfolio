@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { scrollToY } from './smoothScroll.js';
 
 // Page position of an element. A pinned section sits inside GSAP's .pin-spacer and is shifted by
 // its pin distance once the pin has ended, so measure the spacer instead.
@@ -92,5 +93,5 @@ function landingTop(id) {
 }
 
 export function jumpTo(id, reduced) {
-  window.scrollTo({ top: landingTop(id), behavior: reduced ? 'auto' : 'smooth' });
+  scrollToY(landingTop(id), !reduced);
 }
