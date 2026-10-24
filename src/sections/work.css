@@ -214,3 +214,10 @@
   .work__actions { flex-wrap: nowrap; gap: 0.6rem; padding-bottom: 1.4rem; }
   .work__actions .btn { padding: 0.55em 0.75em; font-size: 0.9rem; white-space: nowrap; }
 }
+
+/* the narrowest phones (320px): the two buttons can't share a row */
+@media (max-width: 359px) {
+  .work__actions { flex-wrap: wrap; row-gap: 2.5rem; }
+  .work__tv { width: 36%; }
+  .work__summary { font-size: 0.875rem; }
+}

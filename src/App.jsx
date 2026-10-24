@@ -18,14 +18,13 @@ import { pauseBoilOffscreen, useReducedMotion } from './lib/motion.js';
 import { useChapterScroll, jumpTo } from './lib/useChapterScroll.js';
 import { startSmoothScroll } from './lib/smoothScroll.js';
 import { Story, getStage } from './lib/story.js';
-import { blip, setSound, soundEnabled } from './lib/sound.js';
+import { blip } from './lib/sound.js';
 import './shell/shell.css';
 
 const ids = chapters.map((c) => c.id);
 
 function Site() {
   const reduced = useReducedMotion();
-  const [sound, setSoundState] = useState(soundEnabled);
   // phones: true once the hero's dive has filled the screen with space, so the header flips to light text
   const [diveDark, setDiveDark] = useState(false);
   // desktop: which scene the stage is showing, and any tone/colour it asks the header for
@@ -92,18 +91,7 @@ function Site() {
     <>
       <a className="skip" href="#main">Skip to content</a>
       <Frame tone={tone} />
-      <Header
-        tone={tone}
-        bg={headerBg}
-        sound={sound}
-        onToggleSound={() => {
-          // read the live setting, not the render's copy, so fast double-clicks stay in sync
-          const next = !soundEnabled();
-          setSound(next);
-          setSoundState(next);
-        }}
-        onJump={onJump}
-      />
+      <Header tone={tone} bg={headerBg} onJump={onJump} />
       <main id="main">
         <Story order={ids} onState={setStageState}>
           <Hero onDarkChange={setDiveDark} />

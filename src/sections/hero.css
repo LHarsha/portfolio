@@ -171,8 +171,9 @@
 
 /* small phones */
 @media (max-width: 767px) and (max-height: 700px) {
-  .hero__stage { row-gap: 0.5rem; padding-top: calc(var(--inset) + 4.5rem); padding-bottom: calc(var(--dial-clear) + 1.75rem); }
-  .hero__portal { width: min(56vw, 24svh); }
+  /* the header (name, wrapped sticker, radio) is ~100px tall here */
+  .hero__stage { row-gap: 0.5rem; padding-top: calc(var(--inset) + 6.25rem); padding-bottom: calc(var(--dial-clear) + 1.5rem); }
+  .hero__portal { width: min(52vw, 21svh); }
   .hero__copy { gap: 0.6rem; margin-top: -1.5rem; }
   .hero__name { font-size: clamp(2.6rem, 1rem + 8vw, 3.4rem); }
   .hero__role { margin-top: 0.25rem; font-size: 1rem; }

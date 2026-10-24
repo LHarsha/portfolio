@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { person } from '../data/facts.js';
-import { SpeakerIcon } from '../art/SpeakerIcon.jsx';
+import { RadioPanel } from './RadioPanel.jsx';
 
 const links = [
   { id: 'work', label: 'Work' },
@@ -38,7 +38,7 @@ function useHideOnScroll() {
   return [state, show];
 }
 
-export function Header({ tone, bg, sound, onToggleSound, onJump }) {
+export function Header({ tone, bg, onJump }) {
   const [{ hidden, band }, show] = useHideOnScroll();
   const go = (id) => (e) => {
     e.preventDefault();
@@ -75,10 +75,7 @@ export function Header({ tone, bg, sound, onToggleSound, onJump }) {
             ))}
           </ul>
         </nav>
-        <button type="button" className="hdr__sound" aria-pressed={sound} onClick={onToggleSound}>
-          <SpeakerIcon on={sound} />
-          <span className="hdr__sound-label">{sound ? 'Sound on' : 'Sound off'}</span>
-        </button>
+        <RadioPanel />
       </div>
     </header>
   );
