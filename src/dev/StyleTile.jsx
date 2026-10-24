@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import '@fontsource/lilita-one/latin-400.css';
-import '@fontsource/chango/latin-400.css';
 import '@fontsource/rubik-wet-paint/latin-400.css';
 import { Portal } from '../art/Portal.jsx';
 import { Goo } from '../art/Goo.jsx';
@@ -13,11 +11,7 @@ import './style-tile.css';
 
 // Section 0. Throwaway: delete once the look is approved and the real page exists.
 
-const faces = [
-  { id: 'A', family: 'Bagel Fat One', note: 'soft, bubbly, the friendliest' },
-  { id: 'B', family: 'Lilita One', note: 'tall and punchy, reads like a title card' },
-  { id: 'C', family: 'Chango', note: 'heavy and wide, the loudest' },
-];
+const faces = [{ id: 'A', family: 'Bagel Fat One', note: 'picked by Harsha' }];
 
 const swatches = [
   ['portal', '#97ce4c'],
@@ -47,7 +41,7 @@ export default function StyleTile() {
 
   return (
     <main className="tile">
-      <p className="tile__note hand">Section 0, the style tile. Pick a display face, then we build the real page.</p>
+      <p className="tile__note hand">Section 0, the style tile. Reference only; the real page lives at /.</p>
 
       <section className="tile__hero" aria-labelledby="faces">
         <div className="faces">
@@ -87,7 +81,7 @@ export default function StyleTile() {
 
       <section className="parts" aria-label="Components">
         <div className="parts__col">
-          <p className="sticker">Open to internships</p>
+          <p className="sticker">{person.availability}</p>
           <p className="body-sample">
             BSc Computer Science student specialising in Cognitive Systems at Loyola Academy, Hyderabad. Two of his
             projects are live on the internet right now: a real-time multiplayer party game and an AI debugging

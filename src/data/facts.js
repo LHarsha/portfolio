@@ -9,7 +9,8 @@ export const person = {
   linkedin: 'https://www.linkedin.com/in/harsha-lolewar',
   github: 'https://github.com/LHarsha',
   resume: '/Harsha_Lolewar_Resume.pdf',
-  seeking: 'Internships in AI/ML, software development and related fields',
+  seeking: 'Internships in AI/ML, software development and related fields, plus freelance work',
+  availability: 'Open to roles and freelance',
   interests: ['Guitar', 'Gym'],
   languages: ['English', 'Telugu', 'Hindi'],
 };
