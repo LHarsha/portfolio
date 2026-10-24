@@ -34,12 +34,30 @@ export function About() {
           const { desktop } = ctx.conditions;
           const portal = q('.about__portal')[0];
           const letters = q('.about__char');
-          // Offset from each letter to the portal's mouth, measured unpinned on every refresh.
-          const fromPortal = (axis) => (i, el) => {
-            const p = portal.getBoundingClientRect();
-            const r = el.getBoundingClientRect();
-            return axis === 'x' ? p.left + p.width / 2 - (r.left + r.width / 2) : p.top + p.height / 2 - (r.top + r.height / 2);
+          // Offset from each letter to the portal's mouth. Measured in one batch per refresh with layout
+          // offsets (which ignore transforms), then read from the cache; measuring per letter inside
+          // the tween forced a fresh layout for every letter on every refresh.
+          const centre = (el) => {
+            let x = el.offsetWidth / 2;
+            let y = el.offsetHeight / 2;
+            for (let n = el; n && n !== scene; n = n.offsetParent) {
+              x += n.offsetLeft;
+              y += n.offsetTop;
+            }
+            return [x, y];
           };
+          const tilt = letters.map(() => gsap.utils.random(-40, 40));
+          let offsets = [];
+          const measure = () => {
+            const [px, py] = centre(portal);
+            offsets = letters.map((el) => {
+              const [lx, ly] = centre(el);
+              return [px - lx, py - ly];
+            });
+          };
+          measure();
+          ScrollTrigger.addEventListener('refreshInit', measure);
+          const fromPortal = (axis) => (i) => offsets[i]?.[axis === 'x' ? 0 : 1] ?? 0;
           let landed = 0;
 
           // 1. the drop starts while the chapter is still scrolling in, so it never arrives empty
@@ -61,10 +79,14 @@ export function About() {
           });
           // fromTo, not from: with invalidateOnRefresh a from() re-reads its end values on refresh,
           // and if the letters are sitting in the portal at that moment, the portal becomes the end
+          // Put every letter in its start pose up front. GSAP's immediateRender only reliably set the
+          // first letter of the stagger here, so later letters showed in place before their turn.
+          const start = { x: fromPortal('x'), y: fromPortal('y'), scale: 0.15, rotation: (i) => tilt[i], autoAlpha: 0 };
+          gsap.set(letters, start);
           drop
             .fromTo(
               letters,
-              { x: fromPortal('x'), y: fromPortal('y'), scale: 0.15, rotation: () => gsap.utils.random(-40, 40), autoAlpha: 0 },
+              start,
               {
                 x: 0,
                 y: 0,
@@ -80,15 +102,26 @@ export function About() {
             // squash on landing, then spring back
             .fromTo(letters, { scaleY: 0.62, scaleX: 1.25 }, { scaleY: 1, scaleX: 1, duration: 0.1, ease: 'back.out(3)', stagger: 0.06, immediateRender: false }, 0.12);
 
-          // 2. the pin holds the finished greeting, then the portal closes behind the letters
-          gsap
-            .timeline({
-              defaults: { ease: 'none' },
-              scrollTrigger: { trigger: scene, start: 'top top', end: desktop ? '+=110%' : '+=70%', pin: true, scrub: 0.6 },
-            })
-            .to({}, { duration: 0.35 })
-            .to(portal, { scale: 0, rotation: 90, duration: 0.2, ease: 'back.in(2)' })
-            .to({}, { duration: 0.45 });
+          // 2. desktop: the pin holds the finished greeting, then the portal closes behind the letters.
+          //    phone: no pin (each pin costs startup time on a phone); the portal just closes as you scroll on.
+          if (desktop) {
+            gsap
+              .timeline({
+                defaults: { ease: 'none' },
+                scrollTrigger: { trigger: scene, start: 'top top', end: '+=110%', pin: true, scrub: 0.6 },
+              })
+              .to({}, { duration: 0.35 })
+              .to(portal, { scale: 0, rotation: 90, duration: 0.2, ease: 'back.in(2)' })
+              .to({}, { duration: 0.45 });
+          } else {
+            gsap.to(portal, {
+              scale: 0,
+              rotation: 90,
+              ease: 'back.in(2)',
+              scrollTrigger: { trigger: scene, start: 'top -5%', end: 'top -35%', scrub: 0.6 },
+            });
+          }
+          return () => ScrollTrigger.removeEventListener('refreshInit', measure);
         },
       );
     },

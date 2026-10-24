@@ -21,20 +21,30 @@ export function useChapterScroll(ids, onFrame, headerOffset = 64) {
     let tops = [];
     let max = 1;
     let raf = 0;
+    let measureRaf = 0;
+    let lastStops = '';
     let lastY = window.scrollY;
     let cur = -1;
     let top = -1;
     let bottom = -1;
 
     const measure = () => {
+      measureRaf = 0;
       max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
       tops = ids.map((id) => {
         const el = document.getElementById(id);
         return el ? docTop(el) : 0;
       });
-      setStops(ids.map((id) => Math.min(1, landingTop(id) / max)));
+      const next = ids.map((id) => Math.min(1, landingTop(id) / max));
+      const key = next.map((s) => s.toFixed(4)).join();
+      if (key !== lastStops) {
+        lastStops = key;
+        setStops(next);
+      }
       update();
     };
+    // pins being created resize the body many times in a row; measure once per frame at most
+    const requestMeasure = () => { if (!measureRaf) measureRaf = requestAnimationFrame(measure); };
 
     const update = () => {
       raf = 0;
@@ -55,16 +65,17 @@ export function useChapterScroll(ids, onFrame, headerOffset = 64) {
     };
 
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
-    const ro = new ResizeObserver(measure);
+    const ro = new ResizeObserver(requestMeasure);
     ro.observe(document.body);
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', measure);
-    measure();
+    window.addEventListener('resize', requestMeasure);
+    requestMeasure();
     return () => {
       ro.disconnect();
       window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', measure);
+      window.removeEventListener('resize', requestMeasure);
       cancelAnimationFrame(raf);
+      cancelAnimationFrame(measureRaf);
     };
   }, [ids, headerOffset]);
 

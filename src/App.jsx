@@ -59,11 +59,19 @@ function Site() {
   // a #chapter in the URL (e.g. "Back to the TV" from a case study), which the browser tried to
   // jump to before the pins existed.
   useEffect(() => {
+    // ScrollTrigger already re-measures on window load; only refresh again if fonts land later
+    let loaded = document.readyState === 'complete';
+    const onLoad = () => (loaded = true);
+    window.addEventListener('load', onLoad, { once: true });
     document.fonts?.ready.then(() => {
-      ScrollTrigger.refresh();
+      if (loaded) ScrollTrigger.refresh();
+    });
+    // honour a #chapter (e.g. "Back to the TV") once the real fonts have settled the layout
+    document.fonts?.ready.then(() => {
       const id = window.location.hash.slice(1);
       if (id && document.getElementById(id)) requestAnimationFrame(() => jumpTo(id, true));
     });
+    return () => window.removeEventListener('load', onLoad);
   }, []);
 
   const inDive = underHeader === 0 && diveDark;

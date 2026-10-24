@@ -14,8 +14,13 @@ const MOTION = {
   desktop: '(min-width: 768px) and (prefers-reduced-motion: no-preference)',
   phone: '(max-width: 767px) and (prefers-reduced-motion: no-preference)',
 };
-// Short pins: three statements in a row shouldn't cost a skimming recruiter six screens of scrolling.
-const pin = (scene, desktop) => ({ trigger: scene, start: 'top top', end: desktop ? '+=55%' : '+=45%', pin: true, scrub: 0.5 });
+// Desktop: short pins, so three statements in a row don't cost a skimming recruiter six screens.
+// Phone: no pins at all (each pin costs startup time on a phone); the trick plays as the scene
+// scrolls into view instead.
+const pin = (scene, desktop) =>
+  desktop
+    ? { trigger: scene, start: 'top top', end: '+=55%', pin: true, scrub: 0.5 }
+    : { trigger: scene, start: 'top 75%', end: 'top 10%', scrub: 0.5 };
 
 /* ---------- 1. working: a rough v0.1 straightens into v1.0 ---------- */
 const tilts = [-14, 9, -7, 12, -9, 6, -12];

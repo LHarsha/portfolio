@@ -50,10 +50,12 @@ export function Hero({ onDarkChange }) {
           // Written by hand: clipPath children are finicky about transform origins, this is exact.
           const holeEl = q('.dive__hole')[0];
           const hole = { s: 0 };
-          const drawHole = () => {
-            const { clientWidth: w, clientHeight: h } = root.current;
-            holeEl.setAttribute('transform', `translate(${w / 2} ${h / 2}) scale(${hole.s})`);
-          };
+          // size is read once per refresh, not on every frame (reading it forces layout)
+          let w = root.current.clientWidth;
+          let h = root.current.clientHeight;
+          const resize = () => ({ clientWidth: w, clientHeight: h } = root.current);
+          ScrollTrigger.addEventListener('refreshInit', resize);
+          const drawHole = () => holeEl.setAttribute('transform', `translate(${w / 2} ${h / 2}) scale(${hole.s})`);
 
           gsap.set(q('.dive'), { autoAlpha: 1 });
           const tl = gsap.timeline({
@@ -93,6 +95,7 @@ export function Hero({ onDarkChange }) {
             .to({}, { duration: 0.2 });
 
           return () => {
+            ScrollTrigger.removeEventListener('refreshInit', resize);
             portal.firstElementChild?.classList.remove('is-still');
             if (dark) onDarkChange?.((dark = false));
           };
