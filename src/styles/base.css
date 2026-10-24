@@ -94,6 +94,43 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .btn:active { transform: translate(3px, 3px); box-shadow: var(--shadow-press); transition-duration: 90ms; }
 .btn--plain { background: var(--labcoat); border-radius: var(--sketch-b); }
 
+/* Copy email + contact links (shared by Contact and the footer) */
+.copy-btn { font-size: 1.125rem; min-width: 9.5em; justify-content: center; }
+.copy-btn[data-copied] { background: var(--labcoat); animation: copied-pop 380ms var(--ease-pop); }
+@keyframes copied-pop {
+  0% { scale: 1; }
+  35% { scale: 1.12 0.9; }
+  70% { scale: 0.96 1.05; }
+  100% { scale: 1; }
+}
+.contact-links { display: flex; flex-wrap: wrap; gap: 1rem 1.1rem; margin: 0; padding: 0; list-style: none; }
+.contact-links li:nth-child(1) .contact-links__a { rotate: -1.5deg; }
+.contact-links li:nth-child(2) .contact-links__a { rotate: 1deg; border-radius: var(--sketch-c); }
+.contact-links li:nth-child(3) .contact-links__a { rotate: -0.5deg; border-radius: var(--sketch-a); }
+.contact-links__a { gap: 0.55em; }
+.contact-links__icon { width: 24px; height: 24px; flex-shrink: 0; }
+
+/* goo hanging from the chapter above (colour via --goo); Contact's turns off-white when the hero stayed still */
+.goo-edge {
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 100%;
+  height: clamp(70px, 9vw, 110px);
+  overflow: visible;
+  pointer-events: none;
+}
+.goo-edge__band { fill: var(--goo, var(--space)); }
+.goo-edge__drip {
+  fill: var(--goo, var(--space));
+  stroke: var(--ink);
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact .goo-edge__band, .contact .goo-edge__drip { fill: var(--labcoat); }
+}
+
 /* goo hanging off a button; drips stretch on hover and squash on press */
 .btn .goo { position: absolute; left: 8%; top: calc(100% - 2px); width: 72%; overflow: visible; pointer-events: none; }
 .goo__drip { transform-origin: 50% 0; transform-box: fill-box; transition: transform var(--t-ui) var(--ease-pop); }

@@ -17,7 +17,6 @@
   --font-display: 'Bagel Fat One', 'Rethink Sans', sans-serif;
   --font-body: 'Rethink Sans', system-ui, sans-serif;
   --font-hand: 'Gochi Hand', 'Rethink Sans', cursive;
-  --font-drip: 'Rubik Wet Paint', var(--font-display);
 
   --step-display: clamp(4rem, 2.2rem + 9vw, 12.5rem);
   --step-h2: clamp(2.5rem, 1.6rem + 4.5vw, 6rem);

@@ -17,9 +17,10 @@ const drips = [
   { x: 1150, w: 11, len: 58 },
 ];
 
-export function GooEdge({ className = '' }) {
+// color: the chapter above's colour (defaults to space, for the drip after the portal dive).
+export function GooEdge({ className = '', color }) {
   return (
-    <svg className={`goo-edge ${className}`} viewBox={`0 0 ${W} 110`} preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <svg className={`goo-edge ${className}`} style={color ? { '--goo': color } : undefined} viewBox={`0 0 ${W} 110`} preserveAspectRatio="none" aria-hidden="true" focusable="false">
       {drips.map((d) => (
         <path key={d.x} className="goo-edge__drip" d={dripPath(d.x, d.w, d.len + 10)} />
       ))}

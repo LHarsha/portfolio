@@ -4,7 +4,6 @@ import { BoilDefs } from './art/BoilDefs.jsx';
 import { Frame } from './shell/Frame.jsx';
 import { Header } from './shell/Header.jsx';
 import { ChapterDial } from './shell/ChapterDial.jsx';
-import { Placeholder } from './sections/Placeholder.jsx';
 import { Hero } from './sections/Hero.jsx';
 import { Contact } from './sections/Contact.jsx';
 import { About } from './sections/About.jsx';
@@ -13,16 +12,14 @@ import { Work } from './sections/Work.jsx';
 import { CaseStudy } from './sections/CaseStudy.jsx';
 import { LabLog } from './sections/LabLog.jsx';
 import { Toolkit } from './sections/Toolkit.jsx';
+import { Footer } from './sections/Footer.jsx';
 import { chapters } from './data/chapters.js';
 import { pauseBoilOffscreen, useReducedMotion } from './lib/motion.js';
 import { useChapterScroll, jumpTo } from './lib/useChapterScroll.js';
 import { blip, setSound, soundEnabled } from './lib/sound.js';
-import StyleTile from './dev/StyleTile.jsx';
 import './shell/shell.css';
 
 const ids = chapters.map((c) => c.id);
-// Page flow numbers from CLAUDE.md, used only by the placeholders.
-const steps = { 'the-end': 9 };
 
 function Site() {
   const reduced = useReducedMotion();
@@ -97,10 +94,8 @@ function Site() {
         <Work />
         <LabLog />
         <Toolkit />
-        {chapters.slice(9).map((c) => (
-          <Placeholder key={c.id} chapter={c} step={steps[c.id]} />
-        ))}
       </main>
+      <Footer onJump={(id) => jumpTo(id, reduced)} />
       <ChapterDial ref={marker} chapters={chapters} current={current} tapeColor={chapters[underDial].tape} stops={stops} onJump={onJump} />
     </>
   );
@@ -112,7 +107,7 @@ export default function App() {
   return (
     <>
       <BoilDefs />
-      {path === '/style-tile' ? <StyleTile /> : caseSlug ? <CaseStudy slug={caseSlug} /> : <Site />}
+      {caseSlug ? <CaseStudy slug={caseSlug} /> : <Site />}
     </>
   );
 }

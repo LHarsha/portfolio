@@ -1,0 +1,73 @@
+.end {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: clamp(1rem, 0.6rem + 1.4vw, 1.75rem);
+  padding: calc(var(--inset) + 5rem) calc(var(--inset) + 3vw) calc(var(--inset) + 6.5rem);
+  background: var(--space);
+  color: var(--labcoat);
+  text-align: center;
+  overflow: hidden;
+}
+/* flat stars */
+.end::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(var(--labcoat) 1.4px, transparent 1.8px),
+    radial-gradient(var(--labcoat) 1px, transparent 1.4px);
+  background-size: 170px 190px, 120px 110px;
+  background-position: 20px 60px, 90px 30px;
+  opacity: 0.7;
+}
+.end > *:not(.goo-edge) { position: relative; }
+
+.end__portal { width: clamp(150px, 26vh, 280px); margin-bottom: 0.5rem; }
+
+.end__title { font-family: var(--font-display); font-size: var(--step-h2); }
+.end__line { max-width: 46ch; font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.3rem); }
+
+.end__email {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 0.2rem + 5vw, 4rem);
+  line-height: 1.05;
+  color: var(--mustard);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  background: linear-gradient(var(--mustard), var(--mustard)) left 100% / 0 0.08em no-repeat;
+  padding-bottom: 0.06em;
+  transition: background-size var(--t-ui) var(--ease-out);
+}
+.end__email:hover,
+.end__email:focus-visible { background-size: 100% 0.08em; }
+
+.end__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1rem 1.25rem;
+  padding-bottom: 2rem;
+  color: var(--ink);
+}
+
+.end__again {
+  font-family: var(--font-hand);
+  font-size: var(--step-hand);
+  color: var(--portal-light);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25em;
+}
+
+.end__small { display: grid; gap: 0.2rem; margin-top: 1rem; font-size: var(--step-small); opacity: 0.85; }
+
+@media (max-width: 767px) {
+  .end { padding: calc(var(--inset) + 4.5rem) calc(var(--inset) + 0.5rem) calc(var(--inset) + 6rem); }
+  .end__portal { width: 140px; }
+  .end__actions { flex-direction: column; align-items: center; }
+  .end .contact-links { justify-content: center; }
+}

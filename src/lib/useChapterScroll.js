@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 
+// Page position of an element. A pinned section sits inside GSAP's .pin-spacer and is shifted by
+// its pin distance once the pin has ended, so measure the spacer instead.
+function docTop(el) {
+  const anchor = el.parentElement?.classList.contains('pin-spacer') ? el.parentElement : el;
+  return anchor.getBoundingClientRect().top + window.scrollY;
+}
+
 // Tracks which chapter is in view, which ones sit under the header and under the dial, and
 // where each chapter lands as a fraction of the page. Per-frame progress goes to onFrame.
 export function useChapterScroll(ids, onFrame, headerOffset = 64) {
@@ -23,7 +30,7 @@ export function useChapterScroll(ids, onFrame, headerOffset = 64) {
       max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
       tops = ids.map((id) => {
         const el = document.getElementById(id);
-        return el ? el.getBoundingClientRect().top + window.scrollY : 0;
+        return el ? docTop(el) : 0;
       });
       setStops(ids.map((id) => Math.min(1, landingTop(id) / max)));
       update();
@@ -69,8 +76,8 @@ export function useChapterScroll(ids, onFrame, headerOffset = 64) {
 function landingTop(id) {
   const el = document.getElementById(id);
   if (!el) return 0;
-  const land = el.querySelector('[data-landing]') ?? el;
-  return land.getBoundingClientRect().top + window.scrollY;
+  const land = el.querySelector('[data-landing]');
+  return land ? land.getBoundingClientRect().top + window.scrollY : docTop(el);
 }
 
 export function jumpTo(id, reduced) {
