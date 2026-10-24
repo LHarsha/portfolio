@@ -109,5 +109,24 @@ export const toolkit = {
   Tools: ['Git', 'GitHub', 'VS Code'],
 };
 
-// Harsha's three statements go here, in his own words. Don't write them for him.
-export const statements = [];
+// Harsha's three statements, in his own words (headlines cut from his sentences, picked by him
+// on 2026-10-24; follow-ups are his sentences, trimmed). Don't rewrite them.
+export const statements = {
+  working: {
+    lead: 'I build a ',
+    key: 'working',
+    tail: ' version, then keep improving it.',
+    more: 'I usually start by understanding the problem I want to solve, then research and break it into smaller parts. I like experimenting with different tools, including AI, but I also want to understand how things work rather than just rely on generated code.',
+  },
+  useful: {
+    line1: ['AI can help you build ', 'faster', '.'],
+    line2: ["That doesn't make it ", 'useful', '.'],
+    more: 'People sometimes focus too much on using the newest AI tools and forget about the actual problem they’re trying to solve. Understanding the fundamentals, testing your work, and knowing why something works are just as important as using AI.',
+  },
+  easier: {
+    lead: 'I want things to genuinely become ',
+    key: 'easier',
+    tail: '.',
+    more: 'I want to build things that are practical, easy to use, and genuinely helpful to the people who use them.',
+  },
+};

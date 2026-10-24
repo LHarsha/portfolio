@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useRef, useState } from 'react';
+import { forwardRef, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { rng } from '../lib/rng.js';
 import { blobPath } from '../lib/shapes.js';
 
@@ -17,12 +17,13 @@ function ticksPath(width) {
   return d;
 }
 
-// Labels centre on their landing point; near the ends they tuck inside the tape.
-const edge = (stop) => (stop < 0.06 ? 'is-start' : stop > 0.94 ? 'is-end' : undefined);
-
 export const ChapterDial = forwardRef(function ChapterDial({ chapters, current, tapeColor = 'mustard', stops, onJump }, markerRef) {
   const tape = useRef(null);
+  const list = useRef(null);
   const [width, setWidth] = useState(0);
+  // unlabelled chapters (a group's later scenes) keep showing the group's label; the hero shows none
+  let shown = current;
+  while (shown >= 0 && !chapters[shown].label) shown--;
 
   useEffect(() => {
     const ro = new ResizeObserver(([e]) => setWidth(e.contentRect.width));
@@ -30,21 +31,38 @@ export const ChapterDial = forwardRef(function ChapterDial({ chapters, current, 
     return () => ro.disconnect();
   }, []);
 
+  // Labels centre on their landing point, but never overlap each other or leave the tape:
+  // push right to clear the previous label, then pull back from the right end.
+  useLayoutEffect(() => {
+    const items = [...list.current.children];
+    if (!width || !items.length) return;
+    const gap = 10;
+    const pad = 8;
+    const ws = items.map((li) => li.offsetWidth);
+    const inside = (x, w) => Math.min(Math.max(x, pad + w / 2), width - pad - w / 2);
+    const xs = items.map((li, i) => inside(Number(li.dataset.stop) * width, ws[i]));
+    for (let i = 1; i < xs.length; i++) xs[i] = Math.max(xs[i], xs[i - 1] + (ws[i - 1] + ws[i]) / 2 + gap);
+    const last = xs.length - 1;
+    xs[last] = inside(xs[last], ws[last]);
+    for (let i = last - 1; i >= 0; i--) xs[i] = Math.min(xs[i], xs[i + 1] - (ws[i + 1] + ws[i]) / 2 - gap);
+    items.forEach((li, i) => (li.style.left = `${xs[i]}px`));
+  }, [stops, width]);
+
   return (
     <nav className="dial" data-tape={tapeColor} aria-label="Chapters">
-      {chapters[current].label && (
-        <p className="dial__now" aria-hidden="true">{chapters[current].label}</p>
+      {shown >= 0 && (
+        <p className="dial__now" aria-hidden="true">{chapters[shown].label}</p>
       )}
       <div className="dial__tape" ref={tape}>
         <svg className="dial__ticks" width={width} height="14" aria-hidden="true" focusable="false">
           <path d={ticksPath(width)} />
         </svg>
-        <ol className="dial__labels">
+        <ol className="dial__labels" ref={list}>
           {chapters.map((c, i) => c.label && (
-            <li key={c.id} className={edge(stops[i])} style={{ left: `${stops[i] * 100}%` }}>
+            <li key={c.id} data-stop={stops[i]}>
               <a
                 href={`#${c.id}`}
-                aria-current={i === current ? 'location' : undefined}
+                aria-current={i === shown ? 'location' : undefined}
                 onClick={(e) => {
                   e.preventDefault();
                   onJump(c.id);

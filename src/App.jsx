@@ -8,6 +8,7 @@ import { Placeholder } from './sections/Placeholder.jsx';
 import { Hero } from './sections/Hero.jsx';
 import { Contact } from './sections/Contact.jsx';
 import { About } from './sections/About.jsx';
+import { Words } from './sections/Words.jsx';
 import { chapters } from './data/chapters.js';
 import { pauseBoilOffscreen, useReducedMotion } from './lib/motion.js';
 import { useChapterScroll, jumpTo } from './lib/useChapterScroll.js';
@@ -82,7 +83,8 @@ function Site() {
         <Hero onDarkChange={setDiveDark} />
         <Contact />
         <About />
-        {chapters.slice(3).map((c) => (
+        <Words />
+        {chapters.slice(6).map((c) => (
           <Placeholder key={c.id} chapter={c} step={steps[c.id]} />
         ))}
       </main>

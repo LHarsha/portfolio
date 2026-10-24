@@ -1,0 +1,125 @@
+.words {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  align-items: center;
+  padding: calc(var(--inset) + 6rem) calc(var(--inset) + 4vw) calc(var(--inset) + 6.5rem);
+  color: var(--ink);
+  overflow: hidden;
+}
+.words--working { background: var(--portal); }
+.words--useful { background: var(--alien); }
+.words--easier { background: var(--space); color: var(--labcoat); }
+
+/* flat stars for the space scene */
+.words--easier::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(var(--labcoat) 1.4px, transparent 1.8px),
+    radial-gradient(var(--labcoat) 1px, transparent 1.4px);
+  background-size: 190px 170px, 110px 130px;
+  background-position: 30px 40px, 80px 10px;
+  opacity: 0.7;
+}
+
+.words__inner {
+  position: relative;
+  display: grid;
+  gap: clamp(1.25rem, 0.8rem + 1.6vw, 2.25rem);
+  max-width: 1100px;
+}
+
+.words__head {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 0.9rem + 5vw, 6.25rem);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.words__line { display: block; }
+
+.words__more {
+  max-width: 54ch;
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.3125rem);
+  line-height: 1.55;
+}
+
+/* ---------- working ---------- */
+.working__key { position: relative; display: inline-block; white-space: nowrap; }
+.working__char { display: inline-block; transform-origin: 50% 85%; }
+.working__tape {
+  position: absolute;
+  left: -4%;
+  top: 62%;
+  width: 108%;
+  height: 0.24em;
+  overflow: visible;
+  pointer-events: none;
+  visibility: hidden;
+}
+.working__tag {
+  position: absolute;
+  top: -0.55em;
+  right: -0.6em;
+  padding: 0.25em 0.55em 0.3em;
+  background: var(--mustard);
+  border: 2.5px solid var(--ink);
+  border-radius: var(--sketch-c);
+  box-shadow: 3px 3px 0 var(--ink);
+  font-family: var(--font-hand);
+  font-size: clamp(0.95rem, 0.7rem + 0.6vw, 1.35rem);
+  line-height: 1;
+  rotate: 8deg;
+  transition: background-color var(--t-snap) var(--ease-out);
+}
+.working__tag.is-rough { background: var(--labcoat); }
+
+/* ---------- useful ---------- */
+.words--useful .words__line + .words__line { margin-top: 0.2em; }
+.useful__key { position: relative; display: inline-block; margin-left: 0.12em; }
+.useful__loop {
+  position: absolute;
+  left: -16%;
+  top: -26%;
+  width: 134%;
+  height: 156%;
+  overflow: visible;
+  pointer-events: none;
+}
+.useful__loop path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 6;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+/* ---------- easier ---------- */
+.easier__key { position: relative; display: inline-block; z-index: 0; }
+.easier__scribble {
+  position: absolute;
+  z-index: -1;
+  left: -4%;
+  top: 8%;
+  width: 108%;
+  height: 100%;
+  overflow: visible;
+}
+.easier__line {
+  fill: none;
+  stroke: var(--mustard);
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+@media (max-width: 767px) {
+  .words { padding: calc(var(--inset) + 5rem) calc(var(--inset) + 0.5rem) calc(var(--inset) + 5.5rem); }
+  .words__head { font-size: clamp(2rem, 1rem + 6vw, 3rem); }
+}
