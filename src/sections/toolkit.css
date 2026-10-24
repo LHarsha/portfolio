@@ -1,0 +1,113 @@
+.toolkit {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  align-content: center;
+  gap: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  padding: calc(var(--inset) + 5rem) calc(var(--inset) + 3vw) calc(var(--inset) + 6rem);
+  background: var(--portal-light);
+  color: var(--ink);
+}
+.toolkit__title { font-family: var(--font-display); font-size: var(--step-h2); }
+
+/* the pegboard: wood with drilled holes, inked edge */
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.75rem, 1rem + 2.5vw, 3rem) clamp(1.5rem, 1rem + 3vw, 3.5rem);
+  padding: clamp(1.5rem, 1rem + 2vw, 2.75rem);
+  background-color: var(--garage);
+  background-image: radial-gradient(circle, var(--garage-dark) 3px, transparent 3.6px);
+  background-size: 34px 34px;
+  background-position: 17px 17px;
+  border: var(--line-bold) solid var(--ink);
+  border-radius: 14px 26px 12px 22px / 22px 12px 26px 14px;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.board__group { display: grid; gap: 1.1rem; align-content: start; }
+.board__tape {
+  justify-self: start;
+  padding: 0.15em 0.7em 0.2em;
+  background: var(--labcoat);
+  border: 2px solid var(--ink);
+  border-radius: 2px 5px 3px 6px;
+  font-family: var(--font-hand);
+  font-weight: 400;
+  font-size: var(--step-hand);
+  line-height: 1.15;
+  rotate: -2deg;
+}
+
+.board__tags { display: flex; flex-wrap: wrap; gap: 0.4rem 0.9rem; margin: 0; padding: 0; list-style: none; max-width: 30rem; }
+
+/* a shipping tag on a string, hanging from a peg; it pivots at the peg */
+.tag {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  padding-top: 26px;
+  transform-origin: 50% 4px;
+}
+.tag__peg {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  translate: -50% 0;
+  background: var(--ink);
+  border-radius: 46% 54% 50% 50%;
+}
+/* the string */
+.tag__peg::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  width: 2px;
+  height: 22px;
+  translate: -50% 0;
+  background: var(--ink);
+}
+.tag__body {
+  position: relative;
+  display: block;
+  padding: 0.75rem 0.9rem 0.55rem;
+  background: var(--labcoat);
+  border: 2.5px solid var(--ink);
+  border-radius: 12px 12px 6px 8px / 16px 16px 6px 8px;
+  box-shadow: 3px 3px 0 var(--ink);
+  font-weight: 700;
+  font-size: 0.98rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: rotate var(--t-ui) var(--ease-pop);
+}
+.tag__hole {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  translate: -50% 0;
+  background: var(--garage);
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+}
+.tag--mustard .tag__body { background: var(--mustard); }
+.tag--sky .tag__body { background: var(--sky); }
+.tag--portal .tag__body { background: var(--portal); }
+.tag:hover .tag__body { rotate: 6deg; }
+
+/* with motion, GSAP owns the swing and the final lean; without it, CSS hangs each tag at its lean */
+@media (prefers-reduced-motion: reduce) { .tag { rotate: var(--lean); } }
+
+@media (max-width: 1100px) { .board { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+@media (max-width: 767px) {
+  .board { grid-template-columns: 1fr; }
+  .toolkit { padding: calc(var(--inset) + 4.5rem) calc(var(--inset) + 0.25rem) calc(var(--inset) + 6rem); align-content: start; }
+  .board { padding: 1.25rem 1rem; }
+  .tag__body { font-size: 0.9rem; padding: 0.7rem 0.75rem 0.5rem; }
+}

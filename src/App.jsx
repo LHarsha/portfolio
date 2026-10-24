@@ -12,6 +12,7 @@ import { Words } from './sections/Words.jsx';
 import { Work } from './sections/Work.jsx';
 import { CaseStudy } from './sections/CaseStudy.jsx';
 import { LabLog } from './sections/LabLog.jsx';
+import { Toolkit } from './sections/Toolkit.jsx';
 import { chapters } from './data/chapters.js';
 import { pauseBoilOffscreen, useReducedMotion } from './lib/motion.js';
 import { useChapterScroll, jumpTo } from './lib/useChapterScroll.js';
@@ -21,7 +22,7 @@ import './shell/shell.css';
 
 const ids = chapters.map((c) => c.id);
 // Page flow numbers from CLAUDE.md, used only by the placeholders.
-const steps = { toolkit: 8, 'the-end': 9 };
+const steps = { 'the-end': 9 };
 
 function Site() {
   const reduced = useReducedMotion();
@@ -95,7 +96,8 @@ function Site() {
         <Words />
         <Work />
         <LabLog />
-        {chapters.slice(8).map((c) => (
+        <Toolkit />
+        {chapters.slice(9).map((c) => (
           <Placeholder key={c.id} chapter={c} step={steps[c.id]} />
         ))}
       </main>
