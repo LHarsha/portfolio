@@ -32,25 +32,27 @@
 .case__lead { max-width: 52ch; font-size: clamp(1.15rem, 1rem + 0.6vw, 1.5rem); line-height: 1.45; }
 .case__actions { display: flex; flex-wrap: wrap; gap: 1rem 1.25rem; padding-bottom: 2.25rem; }
 
-.case__shots { display: grid; grid-template-columns: 2fr 1fr; gap: clamp(1rem, 2vw, 2rem); }
-.case__shot {
-  display: grid;
-  place-content: center;
-  gap: 0.25rem;
-  min-height: clamp(200px, 30vw, 420px);
-  border: var(--line) dashed var(--ink);
+/* desktop shot and phone shot side by side; the phone column is cut to the desktop shot's height */
+.case__shots { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 1fr); gap: clamp(1rem, 2vw, 2rem); align-items: stretch; }
+.case__shot { display: grid; grid-template-rows: 1fr auto; gap: 0.6rem; margin: 0; }
+.case__shot-frame {
+  position: relative;
+  overflow: hidden;
+  border: var(--line) solid var(--ink);
   border-radius: 14px 22px 12px 18px / 18px 12px 22px 14px;
-  background: color-mix(in srgb, var(--ink) 4%, transparent);
-  text-align: center;
-  font-family: var(--font-hand);
-  font-size: 1.3rem;
+  background: var(--space);
+  box-shadow: var(--shadow);
 }
-.case__shot-small { font-size: 0.95rem; }
+.case__shot img { display: block; width: 100%; height: auto; }
+.case__shot--wide .case__shot-frame { aspect-ratio: 1440 / 900; }
+.case__shot--tall .case__shot-frame { border-radius: 26px 30px 24px 28px / 28px 24px 30px 26px; }
+.case__shot--tall img { position: absolute; inset: 0; height: 100%; object-fit: cover; object-position: top; }
+.case__shot figcaption { font-family: var(--font-hand); font-size: 1.2rem; line-height: 1.2; }
 
 .case__body {
   display: grid;
   grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-  grid-template-areas: 'does parts' 'notes notes';
+  grid-template-areas: 'does parts';
   gap: clamp(2rem, 4vw, 4rem);
   align-items: start;
 }
@@ -97,19 +99,8 @@
 .case__parts ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.3rem; font-family: var(--font-hand); font-size: 1.3rem; }
 .case__parts li::before { content: '+ '; }
 
-.case__notes {
-  grid-area: notes;
-  display: grid;
-  place-content: center;
-  gap: 0.25rem;
-  min-height: 160px;
-  padding: 1.5rem;
-  border: var(--line) dashed var(--ink);
-  border-radius: 18px 12px 22px 14px / 14px 22px 12px 18px;
-  text-align: center;
-  font-family: var(--font-hand);
-  font-size: 1.3rem;
-}
+/* no "what it does" list: the parts note stands on its own, left */
+.case__body--parts-only { grid-template-columns: minmax(0, 22rem); grid-template-areas: 'parts'; }
 
 .case__next a {
   display: grid;
@@ -137,5 +128,9 @@
   .case__bar nav { font-size: 0.9rem; }
   .case { padding-top: calc(var(--inset) + 5.5rem); }
   .case__shots { grid-template-columns: 1fr; }
-  .case__body { grid-template-columns: 1fr; grid-template-areas: 'does' 'parts' 'notes'; }
+  /* stacked, the phone shot shows whole at a phone-ish width */
+  .case__shot--tall { width: min(100%, 300px); justify-self: center; }
+  .case__shot--tall .case__shot-frame { aspect-ratio: 600 / 1298; }
+  .case__body { grid-template-columns: 1fr; grid-template-areas: 'does' 'parts'; }
+  .case__body--parts-only { grid-template-areas: 'parts'; }
 }

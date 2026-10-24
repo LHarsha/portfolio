@@ -7,6 +7,7 @@ import { Goo } from '../art/Goo.jsx';
 import { blip } from '../lib/sound.js';
 import { prefersReducedMotion, useReducedMotion } from '../lib/motion.js';
 import { projects } from '../data/facts.js';
+import { shots } from '../data/shots.js';
 import './work.css';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -46,12 +47,9 @@ function Screen({ project }) {
       </div>
     );
   }
-  return (
-    <div className="screen__slot">
-      <p>Screenshot of {project.name}</p>
-      <p className="screen__slot-small">placeholder, coming from Harsha</p>
-    </div>
-  );
+  const shot = shots[project.slug].tv;
+  // lazy, but every channel's image is in the DOM, so all of them load as the TV scrolls near
+  return <img className="screen__shot" src={shot.src} width={shot.width} height={shot.height} alt={shot.alt} loading="lazy" decoding="async" />;
 }
 
 // The one trick: scrolling turns the channel. Each project is a channel; changing it flips the

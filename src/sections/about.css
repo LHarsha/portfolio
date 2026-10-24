@@ -66,23 +66,7 @@
 }
 
 .about__avatar { margin: 0; }
-.about__avatar-slot {
-  display: grid;
-  place-content: center;
-  gap: 0.25rem;
-  width: clamp(150px, 14vw, 210px);
-  aspect-ratio: 1;
-  padding: 1rem;
-  border: var(--line) dashed var(--ink);
-  border-radius: 46% 54% 50% 50% / 52% 46% 54% 48%;
-  background: color-mix(in srgb, var(--labcoat) 35%, transparent);
-  text-align: center;
-  font-family: var(--font-hand);
-  font-size: 1.15rem;
-  line-height: 1.2;
-  rotate: -3deg;
-}
-.about__avatar-small { font-size: 0.95rem; }
+.about__avatar .avatar { display: block; width: clamp(160px, 15vw, 230px); height: auto; rotate: -3deg; }
 
 .about__bio { display: grid; gap: 0.85rem; font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem); }
 
@@ -129,7 +113,7 @@
   .about__scene { padding-top: calc(var(--inset) + 7.5rem); padding-bottom: calc(var(--inset) + 5rem); }
   .about__portal { top: calc(var(--inset) + 5.5rem); width: 72px; }
   .about__intro { grid-template-columns: 1fr; justify-items: center; }
-  .about__avatar-slot { width: 140px; }
+  .about__avatar .avatar { width: 150px; }
   .about__bio { text-align: left; }
   .about__landing { top: 10svh; }
   .about__more { grid-template-columns: 1fr; padding-top: 1.5rem; padding-bottom: calc(var(--inset) + 6rem); }

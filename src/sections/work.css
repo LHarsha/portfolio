@@ -45,21 +45,14 @@
 .screen__channel { position: absolute; inset: 0; visibility: hidden; }
 .screen__channel[data-on] { visibility: visible; }
 
-.screen__slot {
+.screen__shot {
   position: absolute;
-  inset: 9%;
-  display: grid;
-  place-content: center;
-  gap: 0.2rem;
-  border: var(--line) dashed var(--labcoat);
-  border-radius: 10px;
-  color: var(--labcoat);
-  text-align: center;
-  font-family: var(--font-hand);
-  font-size: clamp(1rem, 0.8rem + 0.7vw, 1.5rem);
-  line-height: 1.2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
 }
-.screen__slot-small { font-size: 0.8em; opacity: 0.85; }
 
 .screen__card { position: absolute; inset: 0; display: grid; place-items: center; }
 .screen__bars {

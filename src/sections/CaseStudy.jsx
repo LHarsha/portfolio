@@ -3,16 +3,29 @@ import { Frame } from '../shell/Frame.jsx';
 import { Goo } from '../art/Goo.jsx';
 import { Tv } from '../art/Tv.jsx';
 import { person, projects } from '../data/facts.js';
+import { shots } from '../data/shots.js';
 import './case.css';
 
 // Projects that have something to show get a page; GroundRAG is "unpublished" and nothing more.
 export const caseProjects = projects.filter((p) => p.stack.length > 0);
 
-// A plain, readable page per project: facts only, screenshots and Harsha's own write-up to come.
+function Shot({ shot, className }) {
+  return (
+    <figure className={`case__shot ${className}`}>
+      <div className="case__shot-frame">
+        <img src={shot.src} width={shot.width} height={shot.height} alt={shot.alt} decoding="async" />
+      </div>
+      <figcaption>{shot.caption}</figcaption>
+    </figure>
+  );
+}
+
+// A plain, readable page per project: facts and screenshots of the live app.
 export function CaseStudy({ slug }) {
   const i = caseProjects.findIndex((p) => p.slug === slug);
   const p = caseProjects[i];
   const next = caseProjects[(i + 1) % caseProjects.length];
+  const shot = p && shots[p.slug];
 
   useEffect(() => {
     document.title = p ? `${p.name}, a project by ${person.name}` : `Not found, ${person.name}`;
@@ -68,17 +81,11 @@ export function CaseStudy({ slug }) {
         </section>
 
         <section className="case__shots" aria-label="Screenshots">
-          <div className="case__shot case__shot--wide">
-            <p>Screenshot of {p.name}</p>
-            <p className="case__shot-small">placeholder, coming from Harsha</p>
-          </div>
-          <div className="case__shot case__shot--tall">
-            <p>Second screenshot</p>
-            <p className="case__shot-small">placeholder</p>
-          </div>
+          <Shot shot={shot.wide} className="case__shot--wide" />
+          <Shot shot={shot.tall} className="case__shot--tall" />
         </section>
 
-        <div className="case__body">
+        <div className={`case__body${p.details.length ? '' : ' case__body--parts-only'}`}>
           {p.details.length > 0 && (
             <section className="case__block" aria-labelledby="case-does">
               <h2 id="case-does" className="case__h2">What it does</h2>
@@ -99,11 +106,6 @@ export function CaseStudy({ slug }) {
               ))}
             </ul>
           </aside>
-
-          <section className="case__notes" aria-label="Harsha's notes">
-            <p>Harsha's notes on this project go here</p>
-            <p className="case__shot-small">in his own words: the problem, how he built it, what he'd do next</p>
-          </section>
         </div>
 
         <nav className="case__next" aria-label="Next project">

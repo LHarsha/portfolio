@@ -5,6 +5,7 @@ import { useGSAP } from '@gsap/react';
 import { Portal } from '../art/Portal.jsx';
 import { Charminar } from '../art/Charminar.jsx';
 import { Guitar, Dumbbell } from '../art/Doodles.jsx';
+import { Avatar } from '../art/Avatar.jsx';
 import { blip } from '../lib/sound.js';
 import { person, education } from '../data/facts.js';
 import './about.css';
@@ -149,10 +150,7 @@ export function About() {
 
         <div className="about__intro">
           <figure className="about__avatar">
-            <div className="about__avatar-slot">
-              <p>Cartoon avatar goes here</p>
-              <p className="about__avatar-small">drawn from Harsha's photo</p>
-            </div>
+            <Avatar />
           </figure>
           <div className="about__bio">
             <p>

@@ -29,7 +29,7 @@ export const projects = [
     name: 'Sync or Solo',
     kind: 'Real-time multiplayer party game',
     live: 'https://sync-or-solo.harshalolewar002.workers.dev/',
-    repo: null, // pending from Harsha
+    repo: 'https://github.com/LHarsha/Sync-or-Solo',
     summary:
       'A party game for 2–8 players on their phones. Everyone answers the same prompt, then bets on matching the crowd (Sync) or standing alone (Solo).',
     details: [
@@ -44,7 +44,7 @@ export const projects = [
     name: 'BugLoop',
     kind: 'AI debugging knowledge assistant',
     live: 'https://bugloop-ai-debugging-knowledge-assistant.ai.studio/',
-    repo: null,
+    repo: null, // built in Google AI Studio, no public repo
     summary:
       'An AI debugging workbench for student developers, vibe-coded in Google AI Studio for the Handshake AI Skill Studio mission.',
     details: [
@@ -58,8 +58,8 @@ export const projects = [
     slug: 'anti-gravity',
     name: 'Anti Gravity',
     kind: '3D project manager',
-    live: null,
-    repo: null,
+    live: 'https://solar-3js.pages.dev/',
+    repo: 'https://github.com/LHarsha/Solar-3js',
     summary:
       'A web app where planets in a 3D solar system represent projects, controlled with hand gestures.',
     details: [],
