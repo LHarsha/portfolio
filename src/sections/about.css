@@ -1,0 +1,141 @@
+.about {
+  position: relative;
+  background: var(--sky);
+  color: var(--ink);
+}
+
+/* ---------- the pinned scene ---------- */
+.about__scene {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: clamp(1.5rem, 1rem + 2vw, 3rem);
+  padding: calc(var(--inset) + 6rem) calc(var(--inset) + 3vw) calc(var(--inset) + 6.5rem);
+  overflow: hidden;
+}
+
+.about__portal {
+  position: absolute;
+  top: calc(var(--inset) + 1.5rem);
+  left: 50%;
+  width: clamp(90px, 9vw, 140px);
+  aspect-ratio: 1;
+  translate: -50% 0;
+}
+.about__portal .portal { width: 100%; height: 100%; }
+/* without motion the portal never opens, so don't show a stray one */
+@media (prefers-reduced-motion: reduce) { .about__portal { display: none; } }
+
+.about__title {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 0.28em;
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 1rem + 7.6vw, 9.5rem);
+  line-height: 0.95;
+  text-align: center;
+}
+.about__word { display: inline-flex; white-space: nowrap; }
+.about__char {
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+  color: var(--labcoat);
+  transform-origin: 50% 100%;
+}
+/* same sticker lettering as the hero name: ink outline plus hard shadow behind the fill */
+.about__char::before,
+.about__char::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  color: var(--ink);
+  -webkit-text-stroke: 0.15em var(--ink);
+}
+.about__char::after { translate: 0.06em 0.07em; }
+
+.about__intro {
+  display: grid;
+  grid-template-columns: auto minmax(0, 46ch);
+  align-items: center;
+  gap: clamp(1.5rem, 1rem + 2vw, 3rem);
+}
+
+.about__avatar { margin: 0; }
+.about__avatar-slot {
+  display: grid;
+  place-content: center;
+  gap: 0.25rem;
+  width: clamp(150px, 14vw, 210px);
+  aspect-ratio: 1;
+  padding: 1rem;
+  border: var(--line) dashed var(--ink);
+  border-radius: 46% 54% 50% 50% / 52% 46% 54% 48%;
+  background: color-mix(in srgb, var(--labcoat) 35%, transparent);
+  text-align: center;
+  font-family: var(--font-hand);
+  font-size: 1.15rem;
+  line-height: 1.2;
+  rotate: -3deg;
+}
+.about__avatar-small { font-size: 0.95rem; }
+
+.about__bio { display: grid; gap: 0.85rem; font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem); }
+
+.about__landing {
+  position: absolute;
+  top: 40svh;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+/* ---------- after the pin: Hyderabad and the interests ---------- */
+.about__more {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  align-items: end;
+  gap: clamp(2rem, 4vw, 5rem);
+  padding: clamp(3rem, 6vw, 6rem) calc(var(--inset) + 3vw) calc(var(--inset) + 7rem);
+}
+
+.about__city { display: grid; gap: 1rem; justify-items: start; }
+.about__city-title { font-family: var(--font-display); font-size: var(--step-h2); }
+.about__city-text { max-width: 44ch; font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem); }
+.about__charminar { width: min(100%, 380px); margin-top: 0.5rem; }
+
+.about__hobbies {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.about__hobby { display: grid; justify-items: center; gap: 0.35rem; font-family: var(--font-hand); font-size: var(--step-hand); }
+.about__hobby--guitar { rotate: -8deg; }
+.about__hobby--gym { rotate: 6deg; }
+.about__guitar { width: clamp(90px, 9vw, 130px); }
+.about__dumbbell { width: clamp(130px, 13vw, 190px); }
+
+@media (max-width: 767px) {
+  .about__scene { padding-top: calc(var(--inset) + 7.5rem); padding-bottom: calc(var(--inset) + 5rem); }
+  .about__portal { top: calc(var(--inset) + 5.5rem); width: 72px; }
+  .about__intro { grid-template-columns: 1fr; justify-items: center; }
+  .about__avatar-slot { width: 140px; }
+  .about__bio { text-align: left; }
+  .about__landing { top: 10svh; }
+  .about__more { grid-template-columns: 1fr; padding-top: 1.5rem; padding-bottom: calc(var(--inset) + 6rem); }
+  .about__hobbies { justify-content: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about__landing { top: 0; }
+}

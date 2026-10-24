@@ -61,6 +61,16 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .boil { animation: boil 0.36s infinite; }
 .boil.is-offscreen { animation-play-state: paused; }
 
+/* cheaper cousin for bigger drawings: a tiny nudge-and-tilt held on twos. It's a pure transform,
+   so the compositor handles it with no repaint (SVG filters are CPU-drawn and add up fast). */
+@keyframes jitter {
+  0%, 33.32% { transform: none; }
+  33.33%, 66.65% { transform: translate(0.6px, -0.4px) rotate(-0.35deg); }
+  66.66%, 100% { transform: translate(-0.4px, 0.5px) rotate(0.3deg); }
+}
+.jitter { animation: jitter 0.36s infinite; will-change: transform; }
+.jitter.is-offscreen { animation-play-state: paused; }
+
 @keyframes spin { to { transform: rotate(-360deg); } }
 
 /* hand-drawn button */
@@ -94,4 +104,5 @@ button { font: inherit; color: inherit; cursor: pointer; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
   .boil { animation: none; filter: url(#boil-0); }
+  .jitter { animation: none; }
 }

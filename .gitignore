@@ -5,3 +5,4 @@ dist
 review/
 .claude/skills/impeccable/scripts/bin/
 .claude/settings.local.json
+private/

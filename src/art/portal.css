@@ -1,3 +1,20 @@
-.portal { overflow: visible; }
-.portal__arms { animation: spin 16s linear infinite; transform-origin: 0 0; }
-@media (prefers-reduced-motion: reduce) { .portal__arms { animation: none; } }
+.portal { position: relative; display: block; aspect-ratio: 1; }
+.portal svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.portal__front { position: absolute; inset: 0; will-change: transform; }
+.portal__arms { animation: spin 16s linear infinite; will-change: transform; }
+
+/* line boil by flipping drawn takes: each take is visible for a third of the cycle */
+@keyframes take { 0%, 33.32% { visibility: visible; } 33.33%, 100% { visibility: hidden; } }
+.portal__take { visibility: hidden; animation: take 0.36s infinite; }
+.portal__take:nth-child(2) { animation-delay: -0.24s; }
+.portal__take:nth-child(3) { animation-delay: -0.12s; }
+.portal.is-still .portal__take,
+.portal.is-offscreen .portal__take,
+.portal.is-still .portal__arms,
+.portal.is-offscreen .portal__arms { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .portal__arms { animation: none; }
+  .portal__take { animation: none; }
+  .portal__take:first-child { visibility: visible; }
+}

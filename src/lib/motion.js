@@ -16,11 +16,11 @@ export function useReducedMotion() {
   return reduced;
 }
 
-// Pause .boil animations while they're off-screen; SVG filters aren't free.
+// Pause boil animations (filter boil and the portal's drawn takes) while they're off-screen.
 export function pauseBoilOffscreen(root = document) {
   const io = new IntersectionObserver((entries) => {
     for (const e of entries) e.target.classList.toggle('is-offscreen', !e.isIntersecting);
   });
-  root.querySelectorAll('.boil').forEach((el) => io.observe(el));
+  root.querySelectorAll('.boil, .jitter, .portal').forEach((el) => io.observe(el));
   return () => io.disconnect();
 }

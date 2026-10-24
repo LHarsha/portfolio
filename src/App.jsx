@@ -7,6 +7,7 @@ import { ChapterDial } from './shell/ChapterDial.jsx';
 import { Placeholder } from './sections/Placeholder.jsx';
 import { Hero } from './sections/Hero.jsx';
 import { Contact } from './sections/Contact.jsx';
+import { About } from './sections/About.jsx';
 import { chapters } from './data/chapters.js';
 import { pauseBoilOffscreen, useReducedMotion } from './lib/motion.js';
 import { useChapterScroll, jumpTo } from './lib/useChapterScroll.js';
@@ -16,7 +17,7 @@ import './shell/shell.css';
 
 const ids = chapters.map((c) => c.id);
 // Page flow numbers from CLAUDE.md, used only by the placeholders.
-const steps = { about: 4, words: 5, work: 6, 'lab-log': 7, toolkit: 8, 'the-end': 9 };
+const steps = { words: 5, work: 6, 'lab-log': 7, toolkit: 8, 'the-end': 9 };
 
 function Site() {
   const reduced = useReducedMotion();
@@ -80,7 +81,8 @@ function Site() {
       <main id="main">
         <Hero onDarkChange={setDiveDark} />
         <Contact />
-        {chapters.slice(2).map((c) => (
+        <About />
+        {chapters.slice(3).map((c) => (
           <Placeholder key={c.id} chapter={c} step={steps[c.id]} />
         ))}
       </main>

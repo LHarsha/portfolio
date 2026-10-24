@@ -66,6 +66,8 @@ export function Hero({ onDarkChange }) {
               scrub: 0.6,
               invalidateOnRefresh: true,
               onUpdate(self) {
+                // hold the rim's boil still mid-dive; it's all scaled up and moving anyway
+                portal.firstElementChild?.classList.toggle('is-still', self.progress > 0.02);
                 const d = self.progress > 0.62;
                 if (d !== dark) onDarkChange?.((dark = d));
                 if (self.progress > 0.3 && self.direction > 0 && !whooshed) {
@@ -84,13 +86,14 @@ export function Hero({ onDarkChange }) {
             .to(q('.hero__cue'), { autoAlpha: 0, duration: 0.08 }, 0)
             .to(portal, { x: toCentre('x'), y: toCentre('y'), scale: 1.25, duration: 0.3, ease: 'power1.inOut' }, 0)
             .to(portal, { scale: desktop ? 3.6 : 3, duration: 0.42, ease: 'power2.in' }, 0.3)
-            .to(q('.portal__spin'), { rotation: -300, svgOrigin: '0 0', duration: 0.72 }, 0)
+            .to(q('.portal__front'), { rotation: -300, duration: 0.72 }, 0)
             .fromTo(hole, { s: 0 }, { s: cover, duration: 0.36, ease: 'power3.in', onUpdate: drawHole }, 0.32)
             .fromTo(q('.dive__stars'), { scale: 1.25 }, { scale: 1, transformOrigin: '50% 50%', duration: 0.3 }, 0.6)
             .fromTo(q('.dive__caption'), { autoAlpha: 0, y: 30, rotate: -6 }, { autoAlpha: 1, y: 0, rotate: -2, duration: 0.14, ease: 'back.out(1.7)' }, 0.66)
             .to({}, { duration: 0.2 });
 
           return () => {
+            portal.firstElementChild?.classList.remove('is-still');
             if (dark) onDarkChange?.((dark = false));
           };
         },
