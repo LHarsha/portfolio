@@ -1,0 +1,59 @@
+/* a blueprint sheet: sky with a pale ruled grid */
+.log {
+  position: relative;
+  background-color: var(--sky);
+  background-image:
+    linear-gradient(rgb(238 243 241 / 0.28) 1.5px, transparent 1.5px),
+    linear-gradient(90deg, rgb(238 243 241 / 0.28) 1.5px, transparent 1.5px);
+  background-size: 44px 44px;
+  color: var(--ink);
+}
+
+.log__sheet {
+  min-height: 100svh;
+  display: grid;
+  align-content: center;
+  gap: clamp(1.5rem, 1rem + 2vw, 2.75rem);
+  padding: calc(var(--inset) + 5rem) calc(var(--inset) + 3vw) calc(var(--inset) + 6rem);
+}
+
+.log__title { font-family: var(--font-display); font-size: var(--step-h2); }
+
+.log__years {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+.log__year { display: grid; gap: 1rem; }
+.log__year-title {
+  justify-self: start;
+  padding: 0.1em 0.5em 0.15em;
+  background: var(--labcoat);
+  border: var(--line) solid var(--ink);
+  border-radius: var(--sketch-c);
+  box-shadow: 4px 4px 0 var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--step-h3);
+  rotate: -2deg;
+}
+
+.log__list { display: grid; gap: clamp(0.9rem, 0.6rem + 0.8vw, 1.4rem); margin: 0; padding: 0; list-style: none; }
+.log__entry { position: relative; display: grid; grid-template-columns: auto minmax(0, max-content) auto; justify-content: start; gap: 0.9rem; align-items: start; }
+
+.log__check { width: 30px; height: 30px; margin-top: 0.2rem; overflow: visible; }
+.log__box { fill: var(--labcoat); stroke: var(--ink); stroke-width: 2.5; stroke-linejoin: round; }
+.log__tick { fill: none; stroke: var(--portal-ink); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
+
+.log__text { display: grid; gap: 0.1rem; }
+.log__when { font-family: var(--font-hand); font-size: 1.15rem; line-height: 1.2; }
+.log__what { font-weight: 700; font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.3rem); line-height: 1.3; }
+.log__where { font-size: 1rem; line-height: 1.45; }
+
+.log__rosette { width: clamp(54px, 5vw, 72px); margin-top: -0.6rem; rotate: -8deg; overflow: visible; }
+
+@media (max-width: 767px) {
+  .log__sheet { padding: calc(var(--inset) + 4.5rem) calc(var(--inset) + 0.25rem) calc(var(--inset) + 6rem); }
+  .log__years { grid-template-columns: 1fr; gap: 2rem; }
+  .log__rosette { width: 52px; }
+}

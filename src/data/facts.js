@@ -77,28 +77,26 @@ export const projects = [
   },
 ];
 
+// Grouped by year. Only the 8–9 Jan hackathon has a known date, so entries within a year don't
+// claim an order beyond that.
 export const labLog = [
-  { when: '2026', what: '1st Prize, Brain Rush & Technoverse', where: 'TECHXCELERATE, Loyola Academy' },
   {
-    when: '2026',
-    what: "SPEC'S Industry Hack 2026",
-    where: "St. Peter's Engineering College",
-    note: 'National-level 24-hr hackathon, team of 2, frontend + bug fixing',
-  },
-  { when: '8–9 Jan 2026', what: '2-day state-level hackathon', where: 'Loyola Academy' },
-  {
-    when: '2026',
-    what: 'Handshake AI Skill Studio',
-    where: 'Handshake',
-    note: 'Built BugLoop, designed a Halloween-themed logo',
+    year: '2025',
+    entries: [
+      { when: '2025–2028', what: 'BSc Computer Science, Cognitive Systems', where: 'Loyola Academy, Hyderabad', note: 'CGPA 8.1/10' },
+      { when: 'From July 2025', what: 'AI & ML with Drone Tech program', where: 'TiHAN IIT Hyderabad × Masai' },
+      { when: 'First semester', what: 'Music Club member', where: 'Loyola Academy' },
+    ],
   },
   {
-    when: 'From July 2025',
-    what: 'AI & ML with Drone Tech program',
-    where: 'TiHAN IIT Hyderabad × Masai',
+    year: '2026',
+    entries: [
+      { when: '8–9 Jan', what: '2-day state-level hackathon', where: 'Loyola Academy' },
+      { when: '2026', what: '1st Prize, Brain Rush & Technoverse', where: 'TECHXCELERATE, Loyola Academy', prize: true },
+      { when: '2026', what: "SPEC'S Industry Hack 2026", where: "St. Peter's Engineering College", note: 'National-level, 24 hours, team of 2: frontend and bug fixing' },
+      { when: '2026', what: 'Handshake AI Skill Studio', where: 'Handshake', note: 'Built BugLoop and designed a Halloween-themed logo' },
+    ],
   },
-  { when: '2025–2028', what: 'BSc Computer Science, Cognitive Systems', where: 'Loyola Academy, Hyderabad', note: 'CGPA 8.1/10' },
-  { when: 'First semester', what: 'Music Club member', where: 'Loyola Academy' },
 ];
 
 export const toolkit = {
