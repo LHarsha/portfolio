@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { scrollToY } from './smoothScroll.js';
+import { getStage, jumpToStage, stageY } from './story.js';
 
 // Page position of an element. A pinned section sits inside GSAP's .pin-spacer and is shifted by
 // its pin distance once the pin has ended, so measure the spacer instead.
@@ -32,7 +34,11 @@ export function useChapterScroll(ids, onFrame, headerOffset = 64) {
     const measure = () => {
       measureRaf = 0;
       max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      // on the stage a chapter takes over halfway through its entry; on the stacked page, at its top
+      const stage = getStage();
+      const span = (id) => stage?.spans.find((s) => s.id === id);
       tops = ids.map((id) => {
+        if (stage) return span(id) ? stage.yAt(span(id).start + span(id).inLen / 2) : 0;
         const el = document.getElementById(id);
         return el ? docTop(el) : 0;
       });
@@ -55,11 +61,13 @@ export function useChapterScroll(ids, onFrame, headerOffset = 64) {
         while (i < tops.length - 1 && tops[i + 1] <= probe) i++;
         return i;
       };
-      const i = at(y + window.innerHeight * 0.4);
+      // the stage is one scene at a time, so every probe is the same point
+      const staged = !!getStage();
+      const i = at(staged ? y : y + window.innerHeight * 0.4);
       if (i !== cur) setCurrent((cur = i));
-      const h = at(y + headerOffset);
+      const h = at(staged ? y : y + headerOffset);
       if (h !== top) setUnderHeader((top = h));
-      const b = at(y + window.innerHeight - 70);
+      const b = at(staged ? y : y + window.innerHeight - 70);
       if (b !== bottom) setUnderDial((bottom = b));
       frame.current?.(Math.min(1, y / max), y - lastY);
       lastY = y;
@@ -70,8 +78,10 @@ export function useChapterScroll(ids, onFrame, headerOffset = 64) {
     ro.observe(document.body);
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', requestMeasure);
+    ScrollTrigger.addEventListener('refresh', requestMeasure);
     requestMeasure();
     return () => {
+      ScrollTrigger.removeEventListener('refresh', requestMeasure);
       ro.disconnect();
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', requestMeasure);
@@ -86,6 +96,8 @@ export function useChapterScroll(ids, onFrame, headerOffset = 64) {
 // Where a chapter "lands": the scroll position at which it's readable. A scene marks that
 // spot with a [data-landing] element (e.g. the end of its intro); otherwise it's the chapter top.
 function landingTop(id) {
+  const staged = getStage() && stageY(id);
+  if (staged != null && staged !== false) return staged;
   const el = document.getElementById(id);
   if (!el) return 0;
   const land = el.querySelector('[data-landing]');
@@ -93,5 +105,6 @@ function landingTop(id) {
 }
 
 export function jumpTo(id, reduced) {
+  if (getStage() && jumpToStage(id, 'settle', !reduced)) return;
   scrollToY(landingTop(id), !reduced);
 }

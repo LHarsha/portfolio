@@ -5,6 +5,8 @@ import { useGSAP } from '@gsap/react';
 import { Tv, Bench, SCREEN } from '../art/Tv.jsx';
 import { Goo } from '../art/Goo.jsx';
 import { GooEdge } from '../art/GooEdge.jsx';
+import { Flood, pour } from '../art/Flood.jsx';
+import { jumpToStage, useScene } from '../lib/story.js';
 import { blip } from '../lib/sound.js';
 import { prefersReducedMotion, useReducedMotion } from '../lib/motion.js';
 import { scrollToY } from '../lib/smoothScroll.js';
@@ -73,34 +75,49 @@ export function Work() {
     blip(300 + i * 90, 60);
   }, []);
 
+  // on the stage: the garage pours in, the TV rises onto its bench, then scroll turns the channel
+  const CH = 0.55;
+  useScene({
+    id: 'work',
+    inLen: 0.4,
+    build: ({ tl, q, el, exit }) => {
+      const dial = { c: 0 };
+      pour(tl, el, 0, 0.4);
+      tl.fromTo(q('.work__set'), { yPercent: 40, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.25, ease: 'back.out(1.4)' }, 0.3)
+        .fromTo(q('.work__title, .work__side'), { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.2, stagger: 0.06 }, 0.35)
+        .addLabel('settle', 0.62)
+        .fromTo(dial, { c: 0 }, { c: n - 0.001, duration: CH * n, onUpdate: () => tune(Math.floor(dial.c)) }, 0.62);
+      // a label in the middle of each channel's stretch, for the channel buttons
+      projects.forEach((_, i) => tl.addLabel(`ch${i}`, 0.62 + CH * (i + 0.5)));
+      tl.to({}, { duration: 0.1 }, tl.duration());
+      // exit: the set drops out as Lab log wipes in
+      tl.to(q('.work__scene'), { y: 50, opacity: 0.4, duration: exit }, tl.duration());
+    },
+  });
+
+  // phones: no stage; the TV is its own short pinned scene
   useGSAP(
     () => {
       const scene = root.current.querySelector('.work__scene');
-      gsap.matchMedia().add(
-        {
-          desktop: '(min-width: 768px) and (prefers-reduced-motion: no-preference)',
-          phone: '(max-width: 767px) and (prefers-reduced-motion: no-preference)',
-        },
-        (ctx) => {
-          trigger.current = ScrollTrigger.create({
-            trigger: scene,
-            start: 'top top',
-            // the page's other pin: about a third of a screen per channel, so it never feels stuck
-            end: ctx.conditions.desktop ? '+=140%' : '+=110%',
-            pin: true,
-            onUpdate: (self) => tune(Math.min(n - 1, Math.floor(self.progress * n))),
-          });
-          return () => {
-            trigger.current = null;
-          };
-        },
-      );
+      gsap.matchMedia().add('(max-width: 767px) and (prefers-reduced-motion: no-preference)', () => {
+        trigger.current = ScrollTrigger.create({
+          trigger: scene,
+          start: 'top top',
+          end: '+=110%',
+          pin: true,
+          onUpdate: (self) => tune(Math.min(n - 1, Math.floor(self.progress * n))),
+        });
+        return () => {
+          trigger.current = null;
+        };
+      });
     },
     { scope: root },
   );
 
-  // With the scroll scene running, a button scrolls to that channel's stretch; otherwise it just tunes.
+  // With a scroll scene running, a button scrolls to that channel's stretch; otherwise it just tunes.
   const choose = (i) => {
+    if (jumpToStage('work', `ch${i}`, !reduced)) return;
     const st = trigger.current;
     if (st) scrollToY(st.start + (st.end - st.start) * ((i + 0.5) / n), !reduced);
     else tune(i);
@@ -109,8 +126,9 @@ export function Work() {
   const p = projects[channel];
 
   return (
-    <section id="work" className="work" ref={root} aria-labelledby="work-title">
-      <GooEdge from="words-3" />
+    <section id="work" className="work scene" data-scene ref={root} aria-labelledby="work-title">
+      <Flood color="var(--garage)" />
+      <GooEdge from="hyderabad" />
       <div className="work__scene">
         <h2 id="work-title" className="work__title">Things I've built</h2>
 

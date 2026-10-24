@@ -9,6 +9,7 @@ import { rng } from '../lib/rng.js';
 import { whoosh } from '../lib/sound.js';
 import { person, projects } from '../data/facts.js';
 import { useReducedMotion } from '../lib/motion.js';
+import { useScene } from '../lib/story.js';
 import './hero.css';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -20,95 +21,104 @@ const stars = (() => {
   return Array.from({ length: 64 }, () => ({ x: rand() * 100, y: rand() * 100, r: 1 + rand() * 2, big: rand() < 0.12 }));
 })();
 
-// The one trick: scroll and the portal's starry core swallows the screen.
+// The dive: the copy steps aside, the portal slides to the middle and grows, and its starry core
+// opens into a hole that swallows the screen. Shared by the stage and the phone's own pinned scene.
+function buildDive(section, tl, { big }) {
+  const q = gsap.utils.selector(section);
+  const portal = q('.hero__portal')[0];
+  // Layout offsets ignore transforms, so these stay right however far the dive has run.
+  const toCentre = (axis) => () =>
+    axis === 'x'
+      ? section.clientWidth / 2 - (portal.offsetLeft + portal.offsetWidth / 2)
+      : section.clientHeight / 2 - (portal.offsetTop + portal.offsetHeight / 2);
+  const cover = () => (Math.hypot(window.innerWidth, window.innerHeight) / holeShape.r) * 1.25;
+  // Written by hand: clipPath children are finicky about transform origins, this is exact.
+  const holeEl = q('.dive__hole')[0];
+  const hole = { s: 0 };
+  // size is read once per refresh, not on every frame (reading it forces layout)
+  let w = section.clientWidth;
+  let h = section.clientHeight;
+  const resize = () => ({ clientWidth: w, clientHeight: h } = section);
+  ScrollTrigger.addEventListener('refreshInit', resize);
+  const drawHole = () => holeEl.setAttribute('transform', `translate(${w / 2} ${h / 2}) scale(${hole.s})`);
+  // side effects that follow the dive: hold the rim's boil still once it's moving, one whoosh going in
+  const fx = { p: 0 };
+  let last = 0;
+  const onFx = () => {
+    portal.firstElementChild?.classList.toggle('is-still', fx.p > 0.03);
+    if (last < 0.4 && fx.p >= 0.4) whoosh();
+    last = fx.p;
+  };
+
+  gsap.set(q('.dive'), { autoAlpha: 1 });
+  tl.to(q('.hero__name, .hero__role, .hero__sticky, .hero__sticky-arrow'), { yPercent: -40, opacity: 0, duration: 0.18, stagger: 0.02 }, 0)
+    .to(q('.hero__cue'), { autoAlpha: 0, duration: 0.08 }, 0)
+    .to(portal, { x: toCentre('x'), y: toCentre('y'), scale: 1.25, duration: 0.3, ease: 'power1.inOut' }, 0)
+    .to(portal, { scale: big ? 3.6 : 3, duration: 0.42, ease: 'power2.in' }, 0.3)
+    .to(q('.portal__front'), { rotation: -300, duration: 0.72 }, 0)
+    .fromTo(hole, { s: 0 }, { s: cover, duration: 0.36, ease: 'power3.in', onUpdate: drawHole }, 0.32)
+    .fromTo(q('.dive__stars'), { scale: 1.25 }, { scale: 1, transformOrigin: '50% 50%', duration: 0.3 }, 0.6)
+    .fromTo(q('.dive__caption'), { autoAlpha: 0, y: 30, rotate: -6 }, { autoAlpha: 1, y: 0, rotate: -2, duration: 0.14, ease: 'back.out(1.7)' }, 0.62)
+    .fromTo(fx, { p: 0 }, { p: 1, duration: 0.72, onUpdate: onFx }, 0);
+
+  return () => {
+    ScrollTrigger.removeEventListener('refreshInit', resize);
+    portal.firstElementChild?.classList.remove('is-still');
+  };
+}
+
 // Markup is the finished, readable hero; the dive is layered on only when motion is allowed.
 export function Hero({ onDarkChange }) {
   const root = useRef(null);
   const reduced = useReducedMotion();
 
+  // on the stage: the dive, then the stars rush past as the next scene opens out of the core
+  useScene({
+    id: 'hero',
+    build: ({ tl, q, el, exit }) => {
+      const off = buildDive(el, tl, { big: true });
+      tl.addLabel('settle', 0);
+      const x = tl.duration();
+      tl.to(q('.dive__stars'), { scale: 1.6, duration: exit }, x).to(q('.dive__caption'), { autoAlpha: 0, scale: 1.3, duration: exit * 0.6 }, x);
+      return off;
+    },
+    // once the core has swallowed the screen the header sits on space
+    toneAt: (t) => (t > 0.45 ? { tone: 'dark', bg: 'var(--space)' } : null),
+  });
+
+  // on phones the hero is its own short pinned scene
   useGSAP(
     () => {
-      const q = gsap.utils.selector(root);
-      const portal = q('.hero__portal')[0];
-      // Layout offsets ignore transforms, so these stay right however far the dive has run.
-      const toCentre = (axis) => () =>
-        axis === 'x'
-          ? root.current.clientWidth / 2 - (portal.offsetLeft + portal.offsetWidth / 2)
-          : root.current.clientHeight / 2 - (portal.offsetTop + portal.offsetHeight / 2);
-
       let dark = false;
-      let whooshed = false;
-      const mm = gsap.matchMedia();
-      mm.add(
-        {
-          desktop: '(min-width: 768px) and (prefers-reduced-motion: no-preference)',
-          phone: '(max-width: 767px) and (prefers-reduced-motion: no-preference)',
-        },
-        (ctx) => {
-          const { desktop } = ctx.conditions;
-          const cover = () => (Math.hypot(window.innerWidth, window.innerHeight) / holeShape.r) * 1.25;
-          // Written by hand: clipPath children are finicky about transform origins, this is exact.
-          const holeEl = q('.dive__hole')[0];
-          const hole = { s: 0 };
-          // size is read once per refresh, not on every frame (reading it forces layout)
-          let w = root.current.clientWidth;
-          let h = root.current.clientHeight;
-          const resize = () => ({ clientWidth: w, clientHeight: h } = root.current);
-          ScrollTrigger.addEventListener('refreshInit', resize);
-          const drawHole = () => holeEl.setAttribute('transform', `translate(${w / 2} ${h / 2}) scale(${hole.s})`);
-
-          gsap.set(q('.dive'), { autoAlpha: 1 });
-          const tl = gsap.timeline({
-            defaults: { ease: 'none' },
-            scrollTrigger: {
-              trigger: root.current,
-              start: 'top top',
-              // one of only two pins on the page, kept short so the scroll barely stops
-              end: desktop ? '+=85%' : '+=70%',
-              pin: true,
-              scrub: 0.4,
-              invalidateOnRefresh: true,
-              onUpdate(self) {
-                // hold the rim's boil still mid-dive; it's all scaled up and moving anyway
-                portal.firstElementChild?.classList.toggle('is-still', self.progress > 0.02);
-                const d = self.progress > 0.62;
-                if (d !== dark) onDarkChange?.((dark = d));
-                if (self.progress > 0.3 && self.direction > 0 && !whooshed) {
-                  whooshed = true;
-                  whoosh();
-                }
-                if (self.progress < 0.1) whooshed = false;
-              },
+      gsap.matchMedia().add('(max-width: 767px) and (prefers-reduced-motion: no-preference)', () => {
+        const tl = gsap.timeline({
+          defaults: { ease: 'none' },
+          scrollTrigger: {
+            trigger: root.current,
+            start: 'top top',
+            end: '+=70%',
+            pin: true,
+            scrub: 0.4,
+            invalidateOnRefresh: true,
+            onUpdate(self) {
+              const d = self.progress > 0.62;
+              if (d !== dark) onDarkChange?.((dark = d));
             },
-          });
-
-          // 1. the copy steps aside while the portal slides to the middle of the screen
-          // 2. the portal grows and spins up; its starry core opens into the hole that swallows the view
-          // 3. the caption lands while the stars settle, with a beat to read it
-          tl.to(q('.hero__name, .hero__role, .hero__sticky, .hero__sticky-arrow'), { yPercent: -40, autoAlpha: 0, duration: 0.18, stagger: 0.02 }, 0)
-            .to(q('.hero__cue'), { autoAlpha: 0, duration: 0.08 }, 0)
-            .to(portal, { x: toCentre('x'), y: toCentre('y'), scale: 1.25, duration: 0.3, ease: 'power1.inOut' }, 0)
-            .to(portal, { scale: desktop ? 3.6 : 3, duration: 0.42, ease: 'power2.in' }, 0.3)
-            .to(q('.portal__front'), { rotation: -300, duration: 0.72 }, 0)
-            .fromTo(hole, { s: 0 }, { s: cover, duration: 0.36, ease: 'power3.in', onUpdate: drawHole }, 0.32)
-            .fromTo(q('.dive__stars'), { scale: 1.25 }, { scale: 1, transformOrigin: '50% 50%', duration: 0.3 }, 0.6)
-            .fromTo(q('.dive__caption'), { autoAlpha: 0, y: 30, rotate: -6 }, { autoAlpha: 1, y: 0, rotate: -2, duration: 0.14, ease: 'back.out(1.7)' }, 0.66)
-            .to({}, { duration: 0.08 });
-
-          return () => {
-            ScrollTrigger.removeEventListener('refreshInit', resize);
-            portal.firstElementChild?.classList.remove('is-still');
-            if (dark) onDarkChange?.((dark = false));
-          };
-        },
-      );
-
+          },
+        });
+        const off = buildDive(root.current, tl, { big: false });
+        tl.to({}, { duration: 0.08 });
+        return () => {
+          off();
+          if (dark) onDarkChange?.((dark = false));
+        };
+      });
     },
     { scope: root },
   );
 
   return (
-    <section id="hero" className="hero" ref={root} aria-labelledby="hero-name">
+    <section id="hero" className="hero scene" data-scene ref={root} aria-labelledby="hero-name">
       <div className="hero__stage">
         <div className="hero__copy">
           <h1 id="hero-name" className="hero__name">
@@ -170,7 +180,7 @@ export function Hero({ onDarkChange }) {
           </g>
         </g>
       </svg>
-      <p className="dive__caption" aria-hidden="true">First stop: how to reach me.</p>
+      <p className="dive__caption" aria-hidden="true">Step inside.</p>
     </section>
   );
 }

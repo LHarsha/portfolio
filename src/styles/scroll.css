@@ -2,13 +2,14 @@
    main thread). Browsers without scroll timelines, and reduced motion, just show everything still.
    data-depth: drifts against the scroll while on screen; --depth sets how far (negative drifts the other way).
    data-exit: lifts away and fades as its chapter leaves the top of the screen. */
+/* the stacked page only (phones): the stage moves things with its own timeline */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    [data-depth] {
+    .story:not(.is-stage) [data-depth] {
       animation: depth-drift linear both;
       animation-timeline: view();
     }
-    [data-exit] {
+    .story:not(.is-stage) [data-exit] {
       animation: chapter-exit linear both;
       animation-timeline: view();
       animation-range: exit 0% exit 100%;

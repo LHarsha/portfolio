@@ -4,67 +4,41 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { statements } from '../data/facts.js';
 import { GooEdge } from '../art/GooEdge.jsx';
+import { Flood, pour } from '../art/Flood.jsx';
+import { points, useScene } from '../lib/story.js';
 import { rng } from '../lib/rng.js';
 import './words.css';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-// Three scenes, one per statement, each with one trick on its key word.
+// In my words: Harsha's three statements, one per screen, each with one trick on its key word.
+// On the stage they swap in place, each pouring down over the last; on phones they stack.
 // Markup is the finished state; tricks run from a rough start state only when motion is allowed.
-const MOTION = '(prefers-reduced-motion: no-preference)';
-// No pins: the page never stops. Each trick plays across the whole slide-in, from the moment the
-// scene appears, and is done just before it reaches the top.
-const play = (scene) => ({ trigger: scene, start: 'top 95%', end: 'top 5%', scrub: 0.5 });
 
-/* ---------- 1. working: a rough v0.1 straightens into v1.0 ---------- */
+/* ---------- 1. working: a rough v0.1 straightens into v1.0, then keeps improving ---------- */
 const tilts = [-14, 9, -7, 12, -9, 6, -12];
 const lifts = [10, -14, 6, -10, 14, -6, 9];
+const versions = ['v0.1', 'v0.4', 'v0.7', 'v1.0'];
+const later = ['v1.0', 'v1.1', 'v1.2', 'v1.3'];
+function tagger(tag) {
+  const pick = (list, p) => list[Math.min(list.length - 1, Math.floor(gsap.utils.clamp(0, 0.999, p) * list.length))];
+  return {
+    rough: (p) => {
+      const v = pick(versions, p);
+      if (tag.textContent !== v) tag.textContent = v;
+      tag.classList.toggle('is-rough', v !== 'v1.0');
+    },
+    later: (p) => {
+      const v = pick(later, p);
+      if (tag.textContent !== v) tag.textContent = v;
+    },
+  };
+}
 
 function Working() {
-  const root = useRef(null);
   const s = statements.working;
-
-  useGSAP(
-    () => {
-      const q = gsap.utils.selector(root);
-      const tag = q('.working__tag')[0];
-      gsap.matchMedia().add(MOTION, () => {
-        const versions = ['v0.1', 'v0.4', 'v0.7', 'v1.0'];
-        const setTag = (p) => {
-          const v = versions[Math.min(versions.length - 1, Math.floor(p * versions.length))];
-          if (tag.textContent !== v) tag.textContent = v;
-          tag.classList.toggle('is-rough', v !== 'v1.0');
-        };
-        setTag(0);
-        gsap
-          .timeline({ defaults: { ease: 'none' }, scrollTrigger: { ...play(root.current), onUpdate: (st) => setTag(st.progress / 0.7) } })
-          .fromTo(q('.working__tape'), { scaleX: 1, rotate: -7, autoAlpha: 1 }, { scaleX: 0, rotate: -20, autoAlpha: 0, transformOrigin: '100% 50%', duration: 0.25, ease: 'power2.in' }, 0)
-          .fromTo(
-            q('.working__char'),
-            { rotate: (i) => tilts[i % tilts.length], y: (i) => lifts[i % lifts.length] },
-            { rotate: 0, y: 0, duration: 0.3, ease: 'back.out(2)', stagger: 0.05 },
-            0.15,
-          )
-          .to({}, { duration: 0.3 });
-        // "...then keep improving it": as the statement scrolls away, the tag keeps going past v1.0
-        const later = ['v1.0', 'v1.1', 'v1.2', 'v1.3'];
-        ScrollTrigger.create({
-          trigger: root.current,
-          start: 'top top',
-          end: 'bottom top',
-          onUpdate: (st) => {
-            const v = later[Math.min(later.length - 1, Math.floor(st.progress * later.length))];
-            if (tag.textContent !== v) tag.textContent = v;
-          },
-        });
-        return () => setTag(1);
-      });
-    },
-    { scope: root },
-  );
-
   return (
-    <section id="words" className="words words--working" ref={root} aria-labelledby="working-title">
+    <article className="words words--working belief" aria-labelledby="working-title">
       <GooEdge from="about" />
       <div className="words__inner" data-exit>
         <h2 id="working-title" className="words__head">
@@ -86,31 +60,17 @@ function Working() {
         </h2>
         <p className="words__more" data-depth style={{ '--depth': 0.18 }}>{s.more}</p>
       </div>
-    </section>
+    </article>
   );
 }
 
 /* ---------- 2. useful: an ink loop draws itself around the key word ---------- */
 function Useful() {
-  const root = useRef(null);
   const s = statements.useful;
-
-  useGSAP(
-    () => {
-      const q = gsap.utils.selector(root);
-      gsap.matchMedia().add(MOTION, () => {
-        gsap
-          .timeline({ defaults: { ease: 'none' }, scrollTrigger: play(root.current) })
-          .fromTo(q('.useful__loop path'), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.5, ease: 'power1.inOut' }, 0.05)
-          .to({}, { duration: 0.35 });
-      });
-    },
-    { scope: root },
-  );
-
   return (
-    <section id="words-2" className="words words--useful" ref={root} aria-labelledby="useful-title">
-      <GooEdge from="words" />
+    <article className="words words--useful belief" aria-labelledby="useful-title">
+      <Flood color="var(--alien)" />
+      <GooEdge color="var(--portal)" />
       <div className="words__inner" data-exit>
         <h2 id="useful-title" className="words__head">
           <span className="words__line">
@@ -134,7 +94,7 @@ function Useful() {
         </h2>
         <p className="words__more" data-depth style={{ '--depth': 0.18 }}>{s.more}</p>
       </div>
-    </section>
+    </article>
   );
 }
 
@@ -162,30 +122,11 @@ function scribble(k) {
 const straightPath = scribble(1);
 
 function Easier() {
-  const root = useRef(null);
   const s = statements.easier;
-
-  useGSAP(
-    () => {
-      const q = gsap.utils.selector(root);
-      const line = q('.easier__line')[0];
-      gsap.matchMedia().add(MOTION, () => {
-        const state = { k: 0 };
-        const draw = () => line.setAttribute('d', scribble(state.k));
-        draw();
-        gsap
-          .timeline({ defaults: { ease: 'none' }, scrollTrigger: play(root.current) })
-          .fromTo(state, { k: 0 }, { k: 1, duration: 0.6, ease: 'power2.inOut', onUpdate: draw }, 0.05)
-          .to({}, { duration: 0.35 });
-        return () => line.setAttribute('d', straightPath);
-      });
-    },
-    { scope: root },
-  );
-
   return (
-    <section id="words-3" className="words words--easier" ref={root} aria-labelledby="easier-title">
-      <GooEdge from="words-2" />
+    <article className="words words--easier belief" aria-labelledby="easier-title">
+      <Flood color="var(--space)" />
+      <GooEdge color="var(--alien)" />
       <div className="words__inner" data-exit>
         <h2 id="easier-title" className="words__head">
           {s.lead}
@@ -199,16 +140,103 @@ function Easier() {
         </h2>
         <p className="words__more" data-depth style={{ '--depth': 0.18 }}>{s.more}</p>
       </div>
-    </section>
+    </article>
   );
 }
 
+// the three tricks, each written once and timed by whoever plays it (the stage or a phone's scroll)
+function tricks(root) {
+  const q = gsap.utils.selector(root);
+  const tags = tagger(q('.working__tag')[0]);
+  const line = q('.easier__line')[0];
+  const untangle = { k: 0 };
+  const draw = () => line.setAttribute('d', scribble(untangle.k));
+  const rough = { p: 0 };
+  const improve = { p: 0 };
+  return {
+    working: (tl, at, len) =>
+      tl
+        .fromTo(q('.working__tape'), { scaleX: 1, rotate: -7, autoAlpha: 1 }, { scaleX: 0, rotate: -20, autoAlpha: 0, transformOrigin: '100% 50%', duration: len * 0.4, ease: 'power2.in' }, at)
+        .fromTo(q('.working__char'), { rotate: (i) => tilts[i % tilts.length], y: (i) => lifts[i % lifts.length] }, { rotate: 0, y: 0, duration: len * 0.5, ease: 'back.out(2)', stagger: len * 0.08 }, at + len * 0.2)
+        .fromTo(rough, { p: 0 }, { p: 1, duration: len, onUpdate: () => tags.rough(rough.p) }, at),
+    improving: (tl, at, len) => tl.fromTo(improve, { p: 0 }, { p: 1, duration: len, onUpdate: () => tags.later(improve.p) }, at),
+    useful: (tl, at, len) => tl.fromTo(q('.useful__loop path'), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: len, ease: 'power1.inOut' }, at),
+    easier: (tl, at, len) => {
+      draw();
+      return tl.fromTo(untangle, { k: 0 }, { k: 1, duration: len, ease: 'power2.inOut', onUpdate: draw }, at);
+    },
+    reset: () => {
+      tags.rough(1);
+      line.setAttribute('d', straightPath);
+    },
+  };
+}
+
 export function Words() {
+  const root = useRef(null);
+
+  useScene({
+    id: 'words',
+    inLen: 0.45,
+    build: ({ tl, q, el, exit }) => {
+      const t = tricks(el);
+      const [, useful, easier] = q('.belief');
+      const inner = (panel) => panel.querySelector('.words__inner');
+      const more = (panel) => panel.querySelector('.words__more');
+      const [working] = q('.belief');
+
+      // entry: the chapter opens out of Hello's full stop
+      tl.fromTo(
+        el,
+        { clipPath: () => `circle(0% at ${points.zoom.x}px ${points.zoom.y}px)` },
+        { clipPath: () => `circle(150% at ${points.zoom.x}px ${points.zoom.y}px)`, duration: 0.45, ease: 'power2.in' },
+        0,
+      );
+      // 1. working, then its paragraph reads in
+      t.working(tl, 0.42, 0.5);
+      tl.fromTo(more(working), { opacity: 0.15 }, { opacity: 1, duration: 0.3 }, 0.85).addLabel('settle', 0.95);
+      // ...then keep improving it: past v1.0 while the next belief pours in
+      t.improving(tl, 1.2, 0.45);
+      // 2. useful pours in
+      pour(tl, useful, 1.3, 0.35);
+      tl.fromTo(inner(useful), { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.15 }, 1.55);
+      t.useful(tl, 1.65, 0.45);
+      tl.fromTo(more(useful), { opacity: 0.15 }, { opacity: 1, duration: 0.3 }, 2.0).addLabel('useful', 2.32);
+      // 3. easier pours in
+      pour(tl, easier, 2.45, 0.35);
+      tl.fromTo(inner(easier), { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.15 }, 2.7);
+      t.easier(tl, 2.8, 0.5);
+      tl.fromTo(more(easier), { opacity: 0.15 }, { opacity: 1, duration: 0.3 }, 3.2).addLabel('easier', 3.52).to({}, { duration: 0.15 }, 3.5);
+      // exit: the last belief lifts away
+      tl.to(inner(easier), { y: -60, opacity: 0, duration: exit }, tl.duration());
+      return t.reset;
+    },
+    // the header follows the belief on screen: green, then pink, then space
+    toneAt: (t) => (t >= 2.62 ? { tone: 'dark', bg: 'var(--space)' } : t >= 1.47 ? { bg: 'var(--alien)' } : null),
+  });
+
+  // phones: no stage; each trick plays as its belief scrolls in, done just before it reaches the top
+  useGSAP(
+    () => {
+      gsap.matchMedia().add('(max-width: 767px) and (prefers-reduced-motion: no-preference)', () => {
+        const t = tricks(root.current);
+        const [working, useful, easier] = gsap.utils.toArray('.belief', root.current);
+        const play = (panel) => gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: panel, start: 'top 95%', end: 'top 5%', scrub: 0.5 } });
+        t.working(play(working), 0, 0.7);
+        t.improving(gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: working, start: 'top top', end: 'bottom top', scrub: true } }), 0, 1);
+        t.useful(play(useful), 0.05, 0.6);
+        t.easier(play(easier), 0.05, 0.6);
+        return t.reset;
+      });
+    },
+    { scope: root },
+  );
+
   return (
-    <>
+    <section id="words" className="beliefs scene" data-scene ref={root} aria-label="In my words">
       <Working />
       <Useful />
       <Easier />
-    </>
+    </section>
   );
 }

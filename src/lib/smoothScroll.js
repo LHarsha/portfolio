@@ -23,7 +23,12 @@ export function startSmoothScroll() {
 }
 
 // Programmatic scrolls go through Lenis while it runs, so the two never fight over the page.
-export function scrollToY(top, smooth) {
-  if (lenis) lenis.scrollTo(top, smooth ? { duration: 1.2 } : { immediate: true });
-  else window.scrollTo({ top, behavior: smooth ? 'smooth' : 'auto' });
+// duration (seconds) and onComplete are honoured by Lenis; the browser fallback just goes there.
+export function scrollToY(top, smooth, { duration = 1.2, onComplete } = {}) {
+  if (lenis) {
+    lenis.scrollTo(top, smooth ? { duration, onComplete } : { immediate: true, onComplete });
+    return;
+  }
+  window.scrollTo({ top, behavior: smooth ? 'smooth' : 'auto' });
+  onComplete?.();
 }

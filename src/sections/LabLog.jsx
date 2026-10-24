@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { labLog } from '../data/facts.js';
 import { GooEdge } from '../art/GooEdge.jsx';
+import { useScene } from '../lib/story.js';
 import { rng } from '../lib/rng.js';
 import './lablog.css';
 
@@ -42,18 +43,33 @@ function Rosette() {
 export function LabLog() {
   const root = useRef(null);
 
+  // on the stage: the blueprint wipes in from the right, then the entries get checked off in order,
+  // each brightening as its tick draws, and the prize gets its rosette last
+  useScene({
+    id: 'lab-log',
+    inLen: 0.4,
+    build: ({ tl, q, el, exit }) => {
+      const entries = q('.log__entry');
+      const step = 0.1;
+      tl.fromTo(el, { clipPath: 'inset(0% 0% 0% 100%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.4, ease: 'power2.inOut' }, 0)
+        .fromTo(q('.log__title, .log__year-title'), { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.15, stagger: 0.05, ease: 'back.out(1.6)' }, 0.3);
+      entries.forEach((entry, i) => {
+        const at = 0.45 + i * step;
+        tl.fromTo(entry.querySelector('.log__tick'), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.1, ease: 'power1.out' }, at)
+          .fromTo(entry.querySelector('.log__text'), { opacity: 0.3 }, { opacity: 1, duration: 0.1 }, at);
+      });
+      tl.fromTo(q('.log__rosette'), { scale: 0, rotate: -40 }, { scale: 1, rotate: -8, duration: 0.15, ease: 'back.out(2.5)', transformOrigin: '50% 40%' }, 0.45 + entries.length * step)
+        .addLabel('settle', tl.duration())
+        .to({}, { duration: 0.15 }, tl.duration());
+      // exit: the sheet slides up as the Toolkit pours in
+      tl.to(q('.log__sheet'), { y: -50, duration: exit }, tl.duration());
+    },
+  });
+
   useGSAP(
     () => {
       const q = gsap.utils.selector(root);
       const mm = gsap.matchMedia();
-      // no pins, so the page never stops.
-      // desktop: the whole sheet fits, so the ticks run in order as it scrolls in, all done when it arrives
-      mm.add('(min-width: 768px) and (prefers-reduced-motion: no-preference)', () => {
-        gsap
-          .timeline({ scrollTrigger: { trigger: q('.log__sheet')[0], start: 'top 90%', end: 'top 5%', scrub: 0.5 } })
-          .fromTo(q('.log__tick'), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.1, stagger: 0.09, ease: 'power1.out' })
-          .fromTo(q('.log__rosette'), { scale: 0, rotate: -40 }, { scale: 1, rotate: -8, duration: 0.15, ease: 'back.out(2.5)', transformOrigin: '50% 40%' });
-      });
       // phone: the list is taller than the screen, so each tick draws as its entry scrolls up
       mm.add('(max-width: 767px) and (prefers-reduced-motion: no-preference)', () => {
         q('.log__entry').forEach((entry) => {
@@ -69,7 +85,7 @@ export function LabLog() {
 
   let seed = 40;
   return (
-    <section id="lab-log" className="log" ref={root} aria-labelledby="log-title">
+    <section id="lab-log" className="log scene" data-scene ref={root} aria-labelledby="log-title">
       <GooEdge from="work" />
       <div className="log__sheet" data-exit>
         <h2 id="log-title" className="log__title">Lab log</h2>

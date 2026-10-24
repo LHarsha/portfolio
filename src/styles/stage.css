@@ -1,0 +1,66 @@
+/* The stage (desktop with motion, see src/lib/story.js): every scene is a full-screen layer in one
+   pinned stack, and the story decides which layers show. Without .is-stage (phones, reduced motion)
+   the scenes are ordinary stacked sections and none of this applies. */
+.story.is-stage { position: relative; height: 100svh; overflow: hidden; }
+
+.is-stage > .scene {
+  position: absolute;
+  inset: 0;
+  height: 100svh;
+  min-height: 0;
+  overflow: hidden;
+  /* hidden scenes stay in the page for screen readers; only what's on screen takes clicks */
+  opacity: 0;
+  pointer-events: none;
+}
+.is-stage > .scene.is-on { opacity: 1; pointer-events: auto; }
+/* scenes that aren't showing stop their line boil */
+.is-stage > .scene:not(.is-on) :is(.jitter, .boil, .portal *) { animation-play-state: paused; }
+
+/* the stacked page's goo hand-overs; the stage has its own transitions */
+.is-stage .goo-edge { display: none; }
+
+/* a flood: the scene's colour pouring down, drips leading (src/art/Flood.jsx) */
+.flood { display: none; }
+.is-stage .flood {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--flood);
+}
+.flood__drips {
+  position: absolute;
+  left: 0;
+  top: calc(100% - 2px);
+  width: 100%;
+  height: clamp(70px, 9vw, 110px);
+  overflow: visible;
+}
+.flood__drips path { fill: var(--flood); stroke: var(--ink); stroke-width: 3; vector-effect: non-scaling-stroke; }
+/* where a flood is the background, the scene's own colour steps aside */
+.is-stage :is(.work, .toolkit, .words--useful, .words--easier) { background: transparent; }
+.is-stage .words--easier::before { display: none; }
+.is-stage .words--easier .flood {
+  background-image:
+    radial-gradient(var(--labcoat) 1.4px, transparent 1.8px),
+    radial-gradient(var(--labcoat) 1px, transparent 1.4px);
+  background-size: 190px 170px, 110px 130px;
+  background-position: 30px 40px, 80px 10px;
+}
+
+/* the three statements swap in place */
+.is-stage > .beliefs { background: none; }
+.is-stage .belief { position: absolute; inset: 0; min-height: 0; }
+
+/* the Toolkit's switch-off: a flat bright screen as it collapses */
+.crt-flash { display: none; }
+.is-stage .crt-flash {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: var(--labcoat);
+  opacity: 0;
+  pointer-events: none;
+}

@@ -3,6 +3,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { GooEdge } from '../art/GooEdge.jsx';
+import { Flood, pour } from '../art/Flood.jsx';
+import { useScene } from '../lib/story.js';
 import { toolkit } from '../data/facts.js';
 import { rng } from '../lib/rng.js';
 import './toolkit.css';
@@ -22,9 +24,30 @@ const lean = (() => {
 export function Toolkit() {
   const root = useRef(null);
 
+  // on the stage: the board pours in, the tags swing on their strings as you scroll and settle,
+  // and the exit is the whole screen switching off like an old CRT (the sign-off waits underneath)
+  useScene({
+    id: 'toolkit',
+    inLen: 0.4,
+    build: ({ tl, q, el, exit }) => {
+      pour(tl, el, 0, 0.4);
+      tl.fromTo(q('.toolkit__title, .board'), { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.2, stagger: 0.08 }, 0.3)
+        .fromTo(q('.tag'), { rotate: (i) => (i % 2 ? 28 : -28) }, { rotate: (i) => lean[i], duration: 0.3, ease: 'elastic.out(1, 0.3)', stagger: 0.025 }, 0.45)
+        .addLabel('settle', 0.95)
+        .to({}, { duration: 0.2 }, tl.duration());
+      // exit: squash to a bright line, then to a dot, then gone
+      const x = tl.duration();
+      tl.fromTo(q('.crt-flash'), { opacity: 0 }, { opacity: 1, duration: exit * 0.35 }, x)
+        .to(el, { scaleY: 0.006, duration: exit * 0.5, ease: 'power3.in', transformOrigin: '50% 50%' }, x)
+        .to(el, { scaleX: 0.004, duration: exit * 0.3, ease: 'power2.in' }, x + exit * 0.5)
+        .to(q('.crt-flash'), { opacity: 0, duration: exit * 0.2 }, x + exit * 0.8);
+    },
+  });
+
+  // phones: no stage; the tags swing once when the board scrolls in
   useGSAP(
     () => {
-      gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+      gsap.matchMedia().add('(max-width: 767px) and (prefers-reduced-motion: no-preference)', () => {
         const tags = gsap.utils.toArray('.tag', root.current);
         gsap.fromTo(
           tags,
@@ -44,7 +67,8 @@ export function Toolkit() {
 
   let t = 0;
   return (
-    <section id="toolkit" className="toolkit" ref={root} aria-labelledby="toolkit-title">
+    <section id="toolkit" className="toolkit scene" data-scene ref={root} aria-labelledby="toolkit-title">
+      <Flood color="var(--portal-light)" />
       <GooEdge from="lab-log" />
       <h2 id="toolkit-title" className="toolkit__title" data-depth style={{ '--depth': -0.15 }}>Toolkit</h2>
       <div className="board" data-exit>
@@ -68,6 +92,7 @@ export function Toolkit() {
           </section>
         ))}
       </div>
+      <span className="crt-flash" aria-hidden="true" />
     </section>
   );
 }

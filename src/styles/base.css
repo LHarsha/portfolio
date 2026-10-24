@@ -110,7 +110,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .contact-links__a { gap: 0.55em; }
 .contact-links__icon { width: 24px; height: 24px; flex-shrink: 0; }
 
-/* goo hanging from the chapter above (colour via --goo); Contact's turns off-white when the hero stayed still */
+/* goo hanging from the chapter above (colour via --goo); Hello's turns off-white when the hero stayed still */
 .goo-edge {
   position: absolute;
   top: -4px;
@@ -128,7 +128,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   vector-effect: non-scaling-stroke;
 }
 @media (prefers-reduced-motion: reduce) {
-  .contact .goo-edge__band, .contact .goo-edge__drip { fill: var(--labcoat); }
+  .about .goo-edge__band, .about .goo-edge__drip { fill: var(--labcoat); }
 }
 
 /* goo hanging off a button; drips stretch on hover and squash on press */
