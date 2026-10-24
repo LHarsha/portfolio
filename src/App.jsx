@@ -9,6 +9,8 @@ import { Hero } from './sections/Hero.jsx';
 import { Contact } from './sections/Contact.jsx';
 import { About } from './sections/About.jsx';
 import { Words } from './sections/Words.jsx';
+import { Work } from './sections/Work.jsx';
+import { CaseStudy } from './sections/CaseStudy.jsx';
 import { chapters } from './data/chapters.js';
 import { pauseBoilOffscreen, useReducedMotion } from './lib/motion.js';
 import { useChapterScroll, jumpTo } from './lib/useChapterScroll.js';
@@ -18,7 +20,7 @@ import './shell/shell.css';
 
 const ids = chapters.map((c) => c.id);
 // Page flow numbers from CLAUDE.md, used only by the placeholders.
-const steps = { words: 5, work: 6, 'lab-log': 7, toolkit: 8, 'the-end': 9 };
+const steps = { 'lab-log': 7, toolkit: 8, 'the-end': 9 };
 
 function Site() {
   const reduced = useReducedMotion();
@@ -54,9 +56,15 @@ function Site() {
   );
 
   useEffect(() => pauseBoilOffscreen(), []);
-  // Pins are measured with fallback fonts first; re-measure once the real ones are in.
+  // Pins are measured with fallback fonts first; re-measure once the real ones are in. Then honour
+  // a #chapter in the URL (e.g. "Back to the TV" from a case study), which the browser tried to
+  // jump to before the pins existed.
   useEffect(() => {
-    document.fonts?.ready.then(() => ScrollTrigger.refresh());
+    document.fonts?.ready.then(() => {
+      ScrollTrigger.refresh();
+      const id = window.location.hash.slice(1);
+      if (id && document.getElementById(id)) requestAnimationFrame(() => jumpTo(id, true));
+    });
   }, []);
 
   const inDive = underHeader === 0 && diveDark;
@@ -84,7 +92,8 @@ function Site() {
         <Contact />
         <About />
         <Words />
-        {chapters.slice(6).map((c) => (
+        <Work />
+        {chapters.slice(7).map((c) => (
           <Placeholder key={c.id} chapter={c} step={steps[c.id]} />
         ))}
       </main>
@@ -94,11 +103,12 @@ function Site() {
 }
 
 export default function App() {
-  const tile = typeof window !== 'undefined' && window.location.pathname === '/style-tile';
+  const path = typeof window !== 'undefined' ? window.location.pathname : '/';
+  const caseSlug = path.match(/^\/work\/([^/]+)\/?$/)?.[1];
   return (
     <>
       <BoilDefs />
-      {tile ? <StyleTile /> : <Site />}
+      {path === '/style-tile' ? <StyleTile /> : caseSlug ? <CaseStudy slug={caseSlug} /> : <Site />}
     </>
   );
 }

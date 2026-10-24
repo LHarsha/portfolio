@@ -1,0 +1,141 @@
+/* Case-study pages: calm, readable, same drawing style as the story page. */
+.case__bar {
+  position: fixed;
+  z-index: 60;
+  top: var(--frame);
+  left: var(--frame);
+  right: var(--frame);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem calc(var(--inset) - var(--frame) + 0.25rem);
+  background: var(--labcoat);
+  border-bottom: var(--line) solid var(--ink);
+  border-radius: 26px 22px 18px 24px / 26px 22px 12px 16px;
+}
+.case__home { font-family: var(--font-display); font-size: clamp(1.05rem, 1rem + 0.5vw, 1.4rem); text-decoration: none; }
+.case__bar nav { display: flex; gap: clamp(0.9rem, 0.5rem + 1.5vw, 1.75rem); font-weight: 700; }
+.case__bar nav a { text-decoration-thickness: 2px; text-underline-offset: 0.25em; }
+
+.case {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: calc(var(--inset) + 7rem) calc(var(--inset) + 2vw) calc(var(--inset) + 4rem);
+  display: grid;
+  gap: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+}
+
+.case__top { display: grid; gap: 1rem; justify-items: start; }
+.case__kind { font-family: var(--font-hand); font-size: var(--step-hand); }
+.case__title { font-family: var(--font-display); font-size: clamp(3rem, 1.2rem + 7vw, 7.5rem); line-height: 0.92; }
+.case__lead { max-width: 52ch; font-size: clamp(1.15rem, 1rem + 0.6vw, 1.5rem); line-height: 1.45; }
+.case__actions { display: flex; flex-wrap: wrap; gap: 1rem 1.25rem; padding-bottom: 2.25rem; }
+
+.case__shots { display: grid; grid-template-columns: 2fr 1fr; gap: clamp(1rem, 2vw, 2rem); }
+.case__shot {
+  display: grid;
+  place-content: center;
+  gap: 0.25rem;
+  min-height: clamp(200px, 30vw, 420px);
+  border: var(--line) dashed var(--ink);
+  border-radius: 14px 22px 12px 18px / 18px 12px 22px 14px;
+  background: color-mix(in srgb, var(--ink) 4%, transparent);
+  text-align: center;
+  font-family: var(--font-hand);
+  font-size: 1.3rem;
+}
+.case__shot-small { font-size: 0.95rem; }
+
+.case__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  grid-template-areas: 'does parts' 'notes notes';
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: start;
+}
+.case__block { grid-area: does; display: grid; gap: 1rem; }
+.case__h2 { font-family: var(--font-display); font-size: var(--step-h3); }
+.case__list { display: grid; gap: 0.6rem; margin: 0; padding: 0; list-style: none; font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem); }
+.case__list li { position: relative; padding-left: 1.5rem; }
+.case__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  width: 0.7em;
+  height: 0.7em;
+  background: var(--portal);
+  border: 2px solid var(--ink);
+  border-radius: 46% 54% 40% 60% / 52% 40% 60% 48%;
+}
+
+/* the stack as a taped-up sticky note: garage dressing with a job to do */
+.case__parts {
+  grid-area: parts;
+  position: relative;
+  padding: 1.8rem 1.5rem 1.4rem;
+  background: var(--portal-light);
+  border: var(--line) solid var(--ink);
+  border-radius: 4px 10px 6px 14px / 12px 4px 10px 6px;
+  box-shadow: var(--shadow);
+  rotate: 1.5deg;
+}
+.case__tape {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  width: 84px;
+  height: 24px;
+  translate: -50% 0;
+  rotate: -5deg;
+  background: var(--labcoat);
+  border: 2.5px solid var(--ink);
+  border-radius: 3px;
+}
+.case__parts-title { font-family: var(--font-hand); font-size: 1.5rem; font-weight: 400; margin-bottom: 0.5rem; }
+.case__parts ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.3rem; font-family: var(--font-hand); font-size: 1.3rem; }
+.case__parts li::before { content: '+ '; }
+
+.case__notes {
+  grid-area: notes;
+  display: grid;
+  place-content: center;
+  gap: 0.25rem;
+  min-height: 160px;
+  padding: 1.5rem;
+  border: var(--line) dashed var(--ink);
+  border-radius: 18px 12px 22px 14px / 14px 22px 12px 18px;
+  text-align: center;
+  font-family: var(--font-hand);
+  font-size: 1.3rem;
+}
+
+.case__next a {
+  display: grid;
+  gap: 0.2rem;
+  justify-items: end;
+  text-decoration: none;
+}
+.case__next-label { font-family: var(--font-hand); font-size: var(--step-hand); }
+.case__next-name {
+  font-family: var(--font-display);
+  font-size: var(--step-h2);
+  line-height: 1;
+  background: linear-gradient(var(--ink), var(--ink)) left 100% / 0 0.08em no-repeat;
+  transition: background-size var(--t-ui) var(--ease-out);
+}
+.case__next a:hover .case__next-name,
+.case__next a:focus-visible .case__next-name { background-size: 100% 0.08em; }
+
+.case--missing { justify-items: center; text-align: center; min-height: 100svh; align-content: center; gap: 1.25rem; padding-top: var(--inset); }
+.case--missing .case__title { font-size: clamp(2.5rem, 1.2rem + 4vw, 5rem); }
+.case__lost-tv { width: min(320px, 70vw); }
+
+@media (max-width: 767px) {
+  .case__bar { padding: 0.75rem 0.9rem; }
+  .case__bar nav { font-size: 0.9rem; }
+  .case { padding-top: calc(var(--inset) + 5.5rem); }
+  .case__shots { grid-template-columns: 1fr; }
+  .case__body { grid-template-columns: 1fr; grid-template-areas: 'does' 'parts' 'notes'; }
+}
