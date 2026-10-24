@@ -2,12 +2,16 @@ import { blobPath, spiralArm } from '../lib/shapes.js';
 import { rng } from '../lib/rng.js';
 import './portal.css';
 
-// Flat-band cartoon portal: pale splashy rim, three greens, spiral arms.
-// Only the arms spin; the rim boils in place.
+// Flat-band cartoon portal: pale splashy rim, three greens, spiral arms, and a starry core
+// you can see the other side through. Only the arms spin; the rim boils in place.
 const rim = blobPath({ r: 168, jag: 0.05, splash: 0.16, points: 34, seed: 4 });
 const band = blobPath({ r: 150, jag: 0.04, splash: 0.05, points: 28, seed: 9 });
 const inner = blobPath({ r: 112, jag: 0.06, points: 22, seed: 2 });
-const core = blobPath({ r: 30, jag: 0.12, points: 12, seed: 7 });
+const coreRim = blobPath({ r: 36, jag: 0.12, points: 12, seed: 7 });
+// Shared with the hero's dive so the hole that swallows the screen is this exact shape.
+export const holeShape = { r: 100, jag: 0.12, points: 12, seed: 8 };
+const core = blobPath({ ...holeShape, r: 27 });
+const coreStars = [[-9, -8, 1.8], [8, -3, 1.3], [-2, 9, 1.5], [12, 9, 1]];
 
 const splats = (() => {
   const rand = rng(31);
@@ -32,15 +36,22 @@ export function Portal({ className = '', spin = true }) {
       </g>
       <path d={band} fill="var(--portal)" />
       <path d={inner} fill="var(--portal)" stroke="var(--portal-dark)" strokeWidth="6" />
-      <g className={spin ? 'portal__arms' : undefined}>
-        {thick.map((d, i) => (
-          <path key={i} d={d} fill="none" stroke="var(--portal-dark)" strokeWidth="20" strokeLinecap="round" />
-        ))}
-        {thin.map((d, i) => (
-          <path key={i} d={d} fill="none" stroke="var(--portal-light)" strokeWidth="5" strokeLinecap="round" />
-        ))}
+      {/* outer group is free for scroll-driven rotation; the inner one idles via CSS */}
+      <g className="portal__spin">
+        <g className={spin ? 'portal__arms' : undefined}>
+          {thick.map((d, i) => (
+            <path key={i} d={d} fill="none" stroke="var(--portal-dark)" strokeWidth="20" strokeLinecap="round" />
+          ))}
+          {thin.map((d, i) => (
+            <path key={i} d={d} fill="none" stroke="var(--portal-light)" strokeWidth="5" strokeLinecap="round" />
+          ))}
+        </g>
       </g>
-      <path d={core} fill="var(--portal-light)" />
+      <path d={coreRim} fill="var(--portal-light)" />
+      <path d={core} fill="var(--space)" />
+      {coreStars.map(([x, y, r]) => (
+        <circle key={`${x}${y}`} cx={x} cy={y} r={r} fill="var(--labcoat)" />
+      ))}
     </svg>
   );
 }

@@ -20,7 +20,7 @@ function ticksPath(width) {
 // Labels centre on their landing point; near the ends they tuck inside the tape.
 const edge = (stop) => (stop < 0.06 ? 'is-start' : stop > 0.94 ? 'is-end' : undefined);
 
-export const ChapterDial = forwardRef(function ChapterDial({ chapters, current, stops, onJump }, markerRef) {
+export const ChapterDial = forwardRef(function ChapterDial({ chapters, current, tapeColor = 'mustard', stops, onJump }, markerRef) {
   const tape = useRef(null);
   const [width, setWidth] = useState(0);
 
@@ -31,7 +31,7 @@ export const ChapterDial = forwardRef(function ChapterDial({ chapters, current, 
   }, []);
 
   return (
-    <nav className="dial" aria-label="Chapters">
+    <nav className="dial" data-tape={tapeColor} aria-label="Chapters">
       {chapters[current].label && (
         <p className="dial__now" aria-hidden="true">{chapters[current].label}</p>
       )}

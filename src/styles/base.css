@@ -4,6 +4,8 @@ html { -webkit-text-size-adjust: 100%; scrollbar-color: var(--ink) var(--labcoat
 
 body {
   margin: 0;
+  /* GSAP rounds pin wrappers to whole pixels; clip the sub-pixel spill so no sideways scrollbar appears */
+  overflow-x: clip;
   background: var(--labcoat);
   color: var(--ink);
   font-family: var(--font-body);

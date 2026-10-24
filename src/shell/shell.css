@@ -10,7 +10,10 @@
   border: var(--line) solid var(--ink);
   border-radius: 30px 22px 34px 20px / 22px 32px 20px 30px;
   box-shadow: 0 0 0 100vmax var(--ink);
+  transition: border-color var(--t-ui) var(--ease-out);
 }
+/* on dark chapters an ink edge would vanish, so the panel gets a pale inner line */
+.frame[data-tone='dark'] { border-color: var(--portal-light); }
 
 /* ---------- skip link ---------- */
 .skip {
@@ -40,9 +43,27 @@
   justify-content: space-between;
   gap: 1rem;
   color: var(--ink);
-  transition: color var(--t-ui) var(--ease-out);
+  transition: color var(--t-ui) var(--ease-out), translate var(--t-ui) var(--ease-out);
 }
 .hdr[data-tone='dark'] { color: var(--labcoat); }
+.hdr[data-hidden] { translate: 0 calc(-100% - var(--inset) - 1.5rem); }
+/* band behind the header once you've scrolled: chapter colour, wobbly ink bottom edge */
+.hdr::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: calc(var(--frame) - var(--inset));
+  left: calc(var(--frame) - var(--inset));
+  right: calc(var(--frame) - var(--inset));
+  bottom: -0.8rem;
+  background: var(--hdr-bg, var(--labcoat));
+  border-bottom: var(--line) solid var(--ink);
+  border-radius: 26px 22px 18px 24px / 26px 22px 12px 16px;
+  opacity: 0;
+  transition: opacity var(--t-snap) var(--ease-out), background-color var(--t-ui) var(--ease-out);
+}
+.hdr[data-band]::before { opacity: 1; }
+.hdr[data-tone='dark']::before { border-bottom-color: var(--portal-light); }
 
 .hdr__id { display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap; }
 .hdr__name {
@@ -132,6 +153,7 @@
   flex: 1;
   height: 52px;
   background: var(--mustard);
+  transition: background-color var(--t-ui) var(--ease-out);
   border: var(--line) solid var(--ink);
   border-radius: 6px 12px 7px 10px / 10px 6px 12px 7px;
   box-shadow: 4px 4px 0 var(--ink);
@@ -158,6 +180,8 @@
 }
 .dial__labels a:hover { border-color: var(--ink); }
 .dial__labels a[aria-current] { background: var(--labcoat); border-color: var(--ink); }
+.dial[data-tape='labcoat'] .dial__tape { background: var(--labcoat); }
+.dial[data-tape='labcoat'] .dial__labels a[aria-current] { background: var(--mustard); }
 
 .dial__marker {
   position: absolute;

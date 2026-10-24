@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { person } from '../data/facts.js';
 import { SpeakerIcon } from '../art/SpeakerIcon.jsx';
 
@@ -7,14 +8,52 @@ const links = [
   { id: 'contact', label: 'Contact' },
 ];
 
-export function Header({ tone, sound, onToggleSound, onJump }) {
+// Slides away while you scroll down so it never sits on top of a scene; comes back on any
+// upward scroll (or keyboard focus) wearing a band of the chapter's colour.
+function useHideOnScroll() {
+  const [state, setState] = useState({ hidden: false, band: false });
+  useEffect(() => {
+    let last = window.scrollY;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const y = window.scrollY;
+      const dy = y - last;
+      if (Math.abs(dy) < 4) return;
+      last = y;
+      const atTop = y < 80;
+      setState((s) => {
+        const next = { hidden: !atTop && dy > 0, band: !atTop };
+        return next.hidden === s.hidden && next.band === s.band ? s : next;
+      });
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+  const show = () => setState((s) => (s.hidden ? { ...s, hidden: false } : s));
+  return [state, show];
+}
+
+export function Header({ tone, bg, sound, onToggleSound, onJump }) {
+  const [{ hidden, band }, show] = useHideOnScroll();
   const go = (id) => (e) => {
     e.preventDefault();
     onJump(id);
   };
 
   return (
-    <header className="hdr" data-tone={tone}>
+    <header
+      className="hdr"
+      data-tone={tone}
+      data-hidden={hidden || undefined}
+      data-band={band || undefined}
+      style={{ '--hdr-bg': bg }}
+      onFocus={show}
+    >
       <div className="hdr__id">
         <a className="hdr__name" href="#hero" onClick={go('hero')}>
           {person.name}

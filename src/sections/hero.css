@@ -1,0 +1,163 @@
+.hero {
+  position: relative;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  background: var(--labcoat);
+  color: var(--ink);
+}
+
+.hero__stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: 'copy art';
+  align-items: center;
+  column-gap: clamp(1rem, 3vw, 4rem);
+  padding: calc(var(--inset) + 4rem) calc(var(--inset) + 3vw) calc(var(--inset) + 6rem);
+}
+
+.hero__copy { grid-area: copy; display: grid; justify-items: start; gap: clamp(1rem, 0.6rem + 1.2vw, 1.75rem); }
+
+.hero__portal {
+  grid-area: art;
+  width: min(64vh, 600px, 46vw);
+  aspect-ratio: 1;
+}
+.hero__portal .portal { width: 100%; height: 100%; }
+
+.hero__name {
+  display: grid;
+  justify-items: start;
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 1rem + 7.4vw, 9rem);
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  rotate: -3deg;
+}
+.hero__name span {
+  position: relative;
+  z-index: 0;
+  display: block;
+  color: var(--mustard);
+}
+.hero__name span:last-child { translate: 0.45em 0; }
+/* ink outline plus a hard offset shadow, drawn as two stroked copies behind the fill */
+.hero__name span::before,
+.hero__name span::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  color: var(--ink);
+  -webkit-text-stroke: 0.15em var(--ink);
+}
+.hero__name span::after { translate: 0.06em 0.07em; }
+
+.hero__role {
+  max-width: 34ch;
+  margin-top: 0.75rem;
+  font-size: clamp(1.0625rem, 0.95rem + 0.4vw, 1.3125rem);
+  font-weight: 500;
+}
+
+/* the proof: a taped sticky note on the garage wall, with real links */
+.hero__proof { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; }
+.hero__sticky {
+  position: relative;
+  max-width: 21rem;
+  padding: 1.35rem 1.25rem 1.1rem;
+  background: var(--portal-light);
+  border: var(--line) solid var(--ink);
+  border-radius: 4px 10px 6px 14px / 12px 4px 10px 6px;
+  box-shadow: var(--shadow);
+  font-family: var(--font-hand);
+  font-size: clamp(1.2rem, 1rem + 0.5vw, 1.45rem);
+  line-height: 1.35;
+  rotate: 1.5deg;
+}
+.hero__sticky a {
+  white-space: nowrap;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+  transition: background-color var(--t-snap) var(--ease-out);
+}
+.hero__sticky a:hover { background: var(--mustard); }
+.hero__tape {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  width: 84px;
+  height: 24px;
+  translate: -50% 0;
+  rotate: -5deg;
+  background: var(--labcoat);
+  border: 2.5px solid var(--ink);
+  border-radius: 3px;
+}
+.hero__sticky-arrow { width: 92px; flex-shrink: 0; transform: rotate(-8deg); }
+
+.hero__cue {
+  position: absolute;
+  left: calc(var(--inset) + 0.5rem);
+  bottom: calc(var(--inset) + 4.75rem);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-hand);
+  font-size: var(--step-hand);
+}
+.hero__cue-arrow { width: 52px; transform: rotate(78deg); }
+
+/* the dive layer: hidden until the motion branch turns it on */
+.dive {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  visibility: hidden;
+}
+.dive__caption {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: max-content;
+  max-width: calc(100% - 2 * var(--inset));
+  margin: 0;
+  color: var(--labcoat);
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 1rem + 4vw, 5rem);
+  line-height: 0.95;
+  text-align: center;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .hero__stage {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'art' 'copy';
+    align-content: center;
+    justify-items: center;
+    row-gap: 0.75rem;
+    padding: calc(var(--inset) + 5.5rem) calc(var(--inset) + 0.5rem) calc(var(--inset) + 6.5rem);
+  }
+  .hero__portal { width: min(64vw, 30vh); }
+  .hero__copy { justify-items: center; text-align: center; margin-top: -2.25rem; }
+  .hero__name { justify-items: center; font-size: clamp(3rem, 1.4rem + 8vw, 4.5rem); }
+  .hero__name span:last-child { translate: 0.3em 0; }
+  .hero__proof { justify-content: center; margin-top: 0.25rem; }
+  .hero__sticky { max-width: 19rem; padding: 1.1rem 1rem 0.9rem; font-size: 1.15rem; text-align: center; }
+  .hero__sticky-arrow { display: none; }
+  .hero__cue { bottom: calc(var(--inset) + 4.1rem); font-size: 1.1rem; }
+  .hero__cue-arrow { width: 36px; }
+}
+
+@media (max-height: 700px) and (min-width: 768px) {
+  .hero__portal { width: min(54vh, 420px); }
+}

@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 
-// Tracks which chapter is in view, which one sits under the header, and where each chapter
-// lands as a fraction of the page. Per-frame progress goes to onFrame (no re-render).
+// Tracks which chapter is in view, which ones sit under the header and under the dial, and
+// where each chapter lands as a fraction of the page. Per-frame progress goes to onFrame.
 export function useChapterScroll(ids, onFrame, headerOffset = 64) {
   const [current, setCurrent] = useState(0);
   const [underHeader, setUnderHeader] = useState(0);
+  const [underDial, setUnderDial] = useState(0);
   const [stops, setStops] = useState(() => ids.map((_, i) => i / ids.length));
   const frame = useRef(onFrame);
   frame.current = onFrame;
@@ -16,6 +17,7 @@ export function useChapterScroll(ids, onFrame, headerOffset = 64) {
     let lastY = window.scrollY;
     let cur = -1;
     let top = -1;
+    let bottom = -1;
 
     const measure = () => {
       max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
@@ -39,6 +41,8 @@ export function useChapterScroll(ids, onFrame, headerOffset = 64) {
       if (i !== cur) setCurrent((cur = i));
       const h = at(y + headerOffset);
       if (h !== top) setUnderHeader((top = h));
+      const b = at(y + window.innerHeight - 70);
+      if (b !== bottom) setUnderDial((bottom = b));
       frame.current?.(Math.min(1, y / max), y - lastY);
       lastY = y;
     };
@@ -57,7 +61,7 @@ export function useChapterScroll(ids, onFrame, headerOffset = 64) {
     };
   }, [ids, headerOffset]);
 
-  return { current, underHeader, stops };
+  return { current, underHeader, underDial, stops };
 }
 
 // Where a chapter "lands": the scroll position at which it's readable. A scene marks that

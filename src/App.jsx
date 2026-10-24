@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { BoilDefs } from './art/BoilDefs.jsx';
 import { Frame } from './shell/Frame.jsx';
 import { Header } from './shell/Header.jsx';
 import { ChapterDial } from './shell/ChapterDial.jsx';
 import { Placeholder } from './sections/Placeholder.jsx';
+import { Hero } from './sections/Hero.jsx';
 import { chapters } from './data/chapters.js';
 import { pauseBoilOffscreen, useReducedMotion } from './lib/motion.js';
 import { useChapterScroll, jumpTo } from './lib/useChapterScroll.js';
@@ -13,11 +15,13 @@ import './shell/shell.css';
 
 const ids = chapters.map((c) => c.id);
 // Page flow numbers from CLAUDE.md, used only by the placeholders.
-const steps = { hero: 2, contact: 3, about: 4, words: 5, work: 6, 'lab-log': 7, toolkit: 8, 'the-end': 9 };
+const steps = { contact: 3, about: 4, words: 5, work: 6, 'lab-log': 7, toolkit: 8, 'the-end': 9 };
 
 function Site() {
   const reduced = useReducedMotion();
   const [sound, setSoundState] = useState(soundEnabled);
+  // true once the hero's dive has filled the screen with space, so the header flips to light text
+  const [diveDark, setDiveDark] = useState(false);
   const marker = useRef(null);
   const settle = useRef(0);
 
@@ -36,7 +40,7 @@ function Site() {
     [reduced],
   );
 
-  const { current, underHeader, stops } = useChapterScroll(ids, onFrame);
+  const { current, underHeader, underDial, stops } = useChapterScroll(ids, onFrame);
 
   const onJump = useCallback(
     (id) => {
@@ -47,13 +51,22 @@ function Site() {
   );
 
   useEffect(() => pauseBoilOffscreen(), []);
+  // Pins are measured with fallback fonts first; re-measure once the real ones are in.
+  useEffect(() => {
+    document.fonts?.ready.then(() => ScrollTrigger.refresh());
+  }, []);
+
+  const inDive = underHeader === 0 && diveDark;
+  const tone = inDive ? 'dark' : chapters[underHeader].tone;
+  const headerBg = inDive ? 'var(--space)' : chapters[underHeader].bg;
 
   return (
     <>
       <a className="skip" href="#main">Skip to content</a>
-      <Frame />
+      <Frame tone={tone} />
       <Header
-        tone={chapters[underHeader].tone}
+        tone={tone}
+        bg={headerBg}
         sound={sound}
         onToggleSound={() => {
           // read the live setting, not the render's copy, so fast double-clicks stay in sync
@@ -64,11 +77,12 @@ function Site() {
         onJump={onJump}
       />
       <main id="main">
-        {chapters.map((c) => (
+        <Hero onDarkChange={setDiveDark} />
+        {chapters.slice(1).map((c) => (
           <Placeholder key={c.id} chapter={c} step={steps[c.id]} />
         ))}
       </main>
-      <ChapterDial ref={marker} chapters={chapters} current={current} stops={stops} onJump={onJump} />
+      <ChapterDial ref={marker} chapters={chapters} current={current} tapeColor={chapters[underDial].tape} stops={stops} onJump={onJump} />
     </>
   );
 }
