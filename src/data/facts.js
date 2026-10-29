@@ -1,4 +1,4 @@
-// The only place facts live. Source: CLAUDE.md + the resume. Never add anything that isn't there.
+// The only place facts live. Source: the resume. Never add anything that isn't there.
 
 export const person = {
   name: 'Harsha Lolewar',
