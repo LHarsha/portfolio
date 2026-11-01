@@ -113,6 +113,9 @@
 }
 .work__ch:hover { transform: translate(-1px, -2px) rotate(-1.5deg); }
 .work__ch[aria-pressed='true'] { background: var(--mustard); }
+/* a TV remote: numbered buttons, the name kept for screen readers (and as a tooltip) */
+.work__ch { padding: 0.35em; }
+.work__ch-name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .work__ch-num {
   display: grid;
   place-items: center;
@@ -147,7 +150,7 @@
 .work__actions { display: flex; flex-wrap: wrap; gap: 1rem 1.25rem; padding-bottom: 2.25rem; margin-top: 0.25rem; }
 
 /* short screens: the title moves beside the TV so the TV gets the height */
-@media (min-width: 768px) and (max-height: 820px) {
+@media (min-width: 768px) and (max-height: 920px) {
   .work__scene {
     /* the TV is sized by height here, so its column can give width to the info side */
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
@@ -160,17 +163,16 @@
   .work__title { align-self: end; font-size: clamp(2rem, 1rem + 6svh, 3.5rem); }
   .work__set { align-self: center; }
   .work__tv { width: min(100%, calc((100svh - 14.5rem) * 1.23)); }
-  .work__ch { padding: 0.3em 0.7em 0.35em 0.4em; font-size: 0.8rem; white-space: nowrap; }
   .work__side { align-content: start; gap: 0.9rem; }
   .work__info { gap: 0.55rem; }
   .work__summary, .work__details { font-size: 1rem; }
   .work__actions { padding-bottom: 1.6rem; }
 }
-/* very short, or short and narrow: the feature list and stack are on the case-study page, one click away */
-@media (min-width: 768px) and (max-height: 720px), (min-width: 768px) and (max-width: 1100px) and (max-height: 820px) {
+/* very short, or tablet-width: the feature list and stack are on the case-study page, one click away */
+@media (min-width: 768px) and (max-height: 720px), (min-width: 768px) and (max-width: 1100px) {
   .work__details { display: none; }
 }
-@media (min-width: 768px) and (max-width: 1100px) and (max-height: 820px) {
+@media (min-width: 768px) and (max-width: 1100px) {
   .work__stack { display: none; }
 }
 /* tablets: a narrow info column, so a little less air */
@@ -191,8 +193,6 @@
   .work__bench { height: 24px; margin-top: -8px; }
   .work__side { gap: 0.9rem; }
   .work__tuner { gap: 0.5rem; }
-  .work__ch { padding: 0.35em; }
-  .work__ch-name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .work__ch-num { width: 2.2em; height: 2.2em; font-size: 1rem; }
   .work__info { gap: 0.45rem; }
   .work__kind { font-size: 1.15rem; }
@@ -218,6 +218,7 @@
 /* the narrowest phones (320px): the two buttons can't share a row */
 @media (max-width: 359px) {
   .work__actions { flex-wrap: wrap; row-gap: 2.5rem; }
-  .work__tv { width: 36%; }
+  .work__tv { width: 32%; }
   .work__summary { font-size: 0.875rem; }
+  .work__kind { display: none; }
 }

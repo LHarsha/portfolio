@@ -55,15 +55,34 @@ export const projects = [
     stack: ['Google AI Studio', 'IndexedDB'],
   },
   {
-    slug: 'anti-gravity',
-    name: 'Anti Gravity',
-    kind: '3D project manager',
-    live: null, // solar-3js.pages.dev has no hand gestures yet; Harsha will send a newer demo
+    slug: 'solar-system',
+    name: 'Solar System',
+    kind: 'Interactive 3D Solar System',
+    live: 'https://solar-3js.pages.dev/',
     repo: 'https://github.com/LHarsha/Solar-3js',
     summary:
-      'A web app where planets in a 3D solar system represent projects, controlled with hand gestures.',
-    details: [],
-    stack: ['React', 'Three.js (React Three Fiber)', 'MediaPipe Hands', 'Zustand', 'Tailwind'],
+      'A 3D model of the Solar System you can travel through. Every planet sits where it really is today, and Earth turns with the real clock.',
+    details: [
+      "Planet positions calculated for the current date from JPL's orbital elements",
+      'Fly to the Sun, all eight planets and thirteen major moons, and visit landmarks on their surfaces',
+      'NASA fact sheets with live distances from the Sun and Earth',
+    ],
+    stack: ['React', 'Three.js (React Three Fiber)', 'GLSL shaders', 'Zustand'],
+  },
+  {
+    slug: 'raft-failure-lab',
+    name: 'Raft Failure Lab',
+    kind: 'Distributed-systems fault simulator',
+    live: 'https://raft-failure-lab.pages.dev/#scenario=leader_crash&seed=0&lo=150&hi=300',
+    repo: 'https://github.com/LHarsha/Raft-Failure-Lab',
+    summary:
+      'Inject delays, crashes, duplicate messages and partitions into a 5-node Raft cluster, and see exactly how it fails, or doesn’t.',
+    details: [
+      'Deterministic simulator: every run is exactly repeatable from its seed',
+      'An invariant checker flags any broken Raft safety rule down to the exact event',
+      'Pure Python, running in the browser through Pyodide (WebAssembly)',
+    ],
+    stack: ['Python', 'Pyodide (WebAssembly)', 'JavaScript', 'GitHub Actions'],
   },
   {
     slug: 'groundrag',
@@ -101,10 +120,10 @@ export const labLog = [
 
 export const toolkit = {
   Languages: ['Python', 'Java', 'C', 'SQL', 'JavaScript'],
-  Web: ['React', 'WebSockets', 'Three.js', 'Cloudflare Workers'],
+  Web: ['React', 'WebSockets', 'Three.js', 'GLSL shaders', 'Pyodide', 'Cloudflare Workers'],
   'AI / ML': ['Prompt engineering', 'Google AI Studio'],
   Data: ['MySQL', 'IndexedDB'],
-  Tools: ['Git', 'GitHub', 'VS Code'],
+  Tools: ['Git', 'GitHub', 'GitHub Actions', 'VS Code'],
 };
 
 // Harsha's three statements, in his own words (headlines cut from his sentences, picked by him

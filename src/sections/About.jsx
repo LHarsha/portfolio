@@ -160,7 +160,7 @@ export function About() {
             </p>
             <p>
               I like turning ideas into things people can open and use: a party game you play on your phone, an AI that
-              helps debug code, a solar system you steer with your hands.
+              helps debug code, a solar system you can fly through, a lab for breaking a distributed system on purpose.
             </p>
             <p>Right now I'm open to internships and freelance work.</p>
           </div>

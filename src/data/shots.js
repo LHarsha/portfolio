@@ -1,4 +1,5 @@
-// Screenshots of the live projects, taken from the deployed apps on 2026-10-24.
+// Screenshots of the live projects, taken from the deployed apps on 2026-10-24 (Solar System and
+// Raft Failure Lab on 2026-11-02).
 // tv: cropped to the TV screen's shape · wide: desktop (1440×900) · tall: phone (390×844).
 import syncTv from '../assets/shots/sync-or-solo-tv.webp';
 import syncWide from '../assets/shots/sync-or-solo-wide.webp';
@@ -6,9 +7,12 @@ import syncTall from '../assets/shots/sync-or-solo-tall.webp';
 import bugTv from '../assets/shots/bugloop-tv.webp';
 import bugWide from '../assets/shots/bugloop-wide.webp';
 import bugTall from '../assets/shots/bugloop-tall.webp';
-import antiTv from '../assets/shots/anti-gravity-tv.webp';
-import antiWide from '../assets/shots/anti-gravity-wide.webp';
-import antiTall from '../assets/shots/anti-gravity-tall.webp';
+import solarTv from '../assets/shots/solar-system-tv.webp';
+import solarWide from '../assets/shots/solar-system-wide.webp';
+import solarTall from '../assets/shots/solar-system-tall.webp';
+import raftTv from '../assets/shots/raft-failure-lab-tv.webp';
+import raftWide from '../assets/shots/raft-failure-lab-wide.webp';
+import raftTall from '../assets/shots/raft-failure-lab-tall.webp';
 
 const TV = { width: 800, height: 657 };
 const WIDE = { width: 1440, height: 900 };
@@ -25,9 +29,14 @@ export const shots = {
     wide: { src: bugWide, ...WIDE, alt: 'BugLoop on a laptop: a React error broken down into observed facts and hypotheses ranked by confidence', caption: 'A diagnosis, step by step' },
     tall: { src: bugTall, ...TALL, alt: 'BugLoop on a phone: the welcome card explaining how to start a diagnosis', caption: 'Getting started, on a phone' },
   },
-  'anti-gravity': {
-    tv: { src: antiTv, ...TV, alt: 'Anti Gravity: a 3D solar system with planets on their orbits around a glowing sun' },
-    wide: { src: antiWide, ...WIDE, alt: 'Anti Gravity on a laptop: a planet is selected and a side panel shows the project it stands for', caption: 'Picking a planet opens its project' },
-    tall: { src: antiTall, ...TALL, alt: 'Anti Gravity on a phone: the solar system seen from above', caption: 'The solar system, on a phone' },
+  'solar-system': {
+    tv: { src: solarTv, ...TV, alt: 'Solar System: the planets on their orbits around the Sun, each where it really is today' },
+    wide: { src: solarWide, ...WIDE, alt: "Solar System on a laptop: the camera has flown to Saturn and its fact sheet is open beside the rings", caption: 'Flying to Saturn opens its fact sheet' },
+    tall: { src: solarTall, ...TALL, alt: 'Solar System on a phone: the inner planets around the Sun with the date and time controls below', caption: 'The Solar System, on a phone' },
+  },
+  'raft-failure-lab': {
+    tv: { src: raftTv, ...TV, alt: 'Raft Failure Lab replaying a leader crash: node n2 has won the election and the timeline shows each node’s term' },
+    wide: { src: raftWide, ...WIDE, alt: 'Raft Failure Lab on a laptop: the leader-crash scenario marked Safe, the five-node cluster, the event log and the timeline', caption: 'Replaying a leader crash: all three guarantees held' },
+    tall: { src: raftTall, ...TALL, alt: 'Raft Failure Lab on a phone: the cluster with n2 as the new leader and the event log below', caption: 'The replay, on a phone' },
   },
 };

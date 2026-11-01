@@ -153,7 +153,7 @@ export function Work() {
         <div className="work__side">
           <div className="work__tuner" role="group" aria-label="Change channel">
             {projects.map((proj, i) => (
-              <button key={proj.slug} type="button" className="work__ch" aria-pressed={i === channel} onClick={() => choose(i)}>
+              <button key={proj.slug} type="button" className="work__ch" aria-pressed={i === channel} title={proj.name} onClick={() => choose(i)}>
                 <span className="work__ch-num" aria-hidden="true">{i + 1}</span>
                 <span className="work__ch-name">{proj.name}</span>
               </button>
