@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "detect": "impeccable detect src/",
-    "deploy": "npm run build && npx --yes wrangler@4 pages deploy dist --project-name=harsha-lolewar"
+    "deploy": "npm run build && npx --yes wrangler@4 pages deploy dist --project-name=harsha-lolewar --branch=master"
   },
   "dependencies": {
     "@fontsource/bagel-fat-one": "^5.3.0",
