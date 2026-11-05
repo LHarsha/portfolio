@@ -11,13 +11,15 @@ import { whoosh } from '../lib/sound.js';
 import { person, projects } from '../data/facts.js';
 import { useReducedMotion } from '../lib/motion.js';
 import { useScene } from '../lib/story.js';
+import { jumpTo } from '../lib/useChapterScroll.js';
 import './hero.css';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const holePath = blobPath(holeShape);
-const liveApps = projects.filter((p) => p.live);
-const howMany = ['None', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'][liveApps.length] ?? String(liveApps.length);
+// the sticky note counts the live projects; the TV has the links, so the note stays short as the list grows
+const live = projects.filter((p) => p.live).length;
+const howMany = ['None', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight'][live] ?? String(live);
 const stars = (() => {
   const rand = rng(91);
   return Array.from({ length: 64 }, () => ({ x: rand() * 100, y: rand() * 100, r: 1 + rand() * 2, big: rand() < 0.12 }));
@@ -135,15 +137,16 @@ export function Hero({ onDarkChange }) {
             <div className="hero__sticky">
               <span className="hero__tape" aria-hidden="true" />
               <p>
-                {howMany} of my apps are live in this dimension right now:{' '}
-                {liveApps.map((p, i) => (
-                  <span key={p.slug}>
-                    {i > 0 && (i === liveApps.length - 1 ? ' and ' : ', ')}
-                    <a href={p.live} target="_blank" rel="noreferrer">
-                      {p.name}
-                    </a>
-                  </span>
-                ))}
+                {howMany} of my projects are live in this dimension right now:{' '}
+                <a
+                  href="#work"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    jumpTo('work', reduced);
+                  }}
+                >
+                  tune in on the TV below
+                </a>
                 .
               </p>
             </div>

@@ -85,6 +85,21 @@ export const projects = [
     stack: ['Python', 'Pyodide (WebAssembly)', 'JavaScript', 'GitHub Actions'],
   },
   {
+    slug: 'telugu-llm-eval',
+    name: 'Telugu LLM Eval',
+    kind: 'Telugu benchmark for LLMs',
+    live: 'https://telugu-llm-eval.pages.dev/',
+    repo: 'https://github.com/LHarsha/Telugu-LLM-Eval',
+    summary:
+      'A benchmark of how well LLMs handle real Telugu, with every question written natively, never machine-translated.',
+    details: [
+      'Tests cultural knowledge of Telangana and Andhra, code-mixed Telugu–English (in Telugu script and Romanized), and reading comprehension',
+      'Strict scoring with Telugu-aware normalisation and 95% bootstrap confidence intervals; an optional LLM judge is reported separately',
+      'Questions are still being written and reviewed; the public leaderboard fills in as they are scored',
+    ],
+    stack: ['Python', 'Gemini API', 'OpenAI-compatible APIs', 'GitHub Actions', 'Cloudflare Pages'],
+  },
+  {
     slug: 'groundrag',
     name: 'GroundRAG',
     kind: 'Research paper, co-author',

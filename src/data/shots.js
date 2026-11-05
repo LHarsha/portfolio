@@ -1,5 +1,5 @@
 // Screenshots of the live projects, taken from the deployed apps on 2026-10-24 (Solar System and
-// Raft Failure Lab on 2026-11-02).
+// Raft Failure Lab on 2026-11-02, Telugu LLM Eval on 2026-11-05).
 // tv: cropped to the TV screen's shape · wide: desktop (1440×900) · tall: phone (390×844).
 import syncTv from '../assets/shots/sync-or-solo-tv.webp';
 import syncWide from '../assets/shots/sync-or-solo-wide.webp';
@@ -13,6 +13,9 @@ import solarTall from '../assets/shots/solar-system-tall.webp';
 import raftTv from '../assets/shots/raft-failure-lab-tv.webp';
 import raftWide from '../assets/shots/raft-failure-lab-wide.webp';
 import raftTall from '../assets/shots/raft-failure-lab-tall.webp';
+import teluguTv from '../assets/shots/telugu-llm-eval-tv.webp';
+import teluguWide from '../assets/shots/telugu-llm-eval-wide.webp';
+import teluguTall from '../assets/shots/telugu-llm-eval-tall.webp';
 
 const TV = { width: 800, height: 657 };
 const WIDE = { width: 1440, height: 900 };
@@ -38,5 +41,10 @@ export const shots = {
     tv: { src: raftTv, ...TV, alt: 'Raft Failure Lab replaying a leader crash: node n2 has won the election and the timeline shows each node’s term' },
     wide: { src: raftWide, ...WIDE, alt: 'Raft Failure Lab on a laptop: the leader-crash scenario marked Safe, the five-node cluster, the event log and the timeline', caption: 'Replaying a leader crash: all three guarantees held' },
     tall: { src: raftTall, ...TALL, alt: 'Raft Failure Lab on a phone: the cluster with n2 as the new leader and the event log below', caption: 'The replay, on a phone' },
+  },
+  'telugu-llm-eval': {
+    tv: { src: teluguTv, ...TV, alt: 'Telugu LLM Eval example questions in Telugu script: a festival question with four answer options, tagged by topic, difficulty and region' },
+    wide: { src: teluguWide, ...WIDE, alt: 'Telugu LLM Eval on a laptop: the examples page showing the format of the cultural-knowledge questions, written in Telugu', caption: 'Example questions, written natively in Telugu' },
+    tall: { src: teluguTall, ...TALL, alt: 'Telugu LLM Eval on a phone: example cultural-knowledge questions in Telugu with their tags', caption: 'The examples, on a phone' },
   },
 };
