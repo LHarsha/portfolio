@@ -91,13 +91,28 @@ export const projects = [
     live: 'https://telugu-llm-eval.pages.dev/',
     repo: 'https://github.com/LHarsha/Telugu-LLM-Eval',
     summary:
-      'A benchmark of how well LLMs handle real Telugu, with every question written natively, never machine-translated.',
+      'A benchmark of how well LLMs handle real Telugu: 30 questions, each checked by a native speaker, with a public leaderboard.',
     details: [
       'Tests cultural knowledge of Telangana and Andhra, code-mixed Telugu–English (in Telugu script and Romanized), and reading comprehension',
-      'Strict scoring with Telugu-aware normalisation and 95% bootstrap confidence intervals; an optional LLM judge is reported separately',
-      'Questions are still being written and reviewed; the public leaderboard fills in as they are scored',
+      'First results: Gemma 4 31B scores 93% and Gemini 3.5 Flash-Lite 87%, against 17% for random guessing; cultural knowledge was Flash-Lite’s weakest area (70%)',
+      'Strict scoring with Telugu-aware answer matching and 95% bootstrap confidence intervals; an LLM judge is reported separately',
     ],
     stack: ['Python', 'Gemini API', 'OpenAI-compatible APIs', 'GitHub Actions', 'Cloudflare Pages'],
+  },
+  {
+    slug: 'voice-agent',
+    name: 'Voice Agent',
+    kind: 'Voice assistant for Android',
+    live: null,
+    repo: 'https://github.com/LHarsha/voice-agent-android',
+    summary:
+      'A Siri-style voice assistant for Android: a glowing orb pops up over any app, listens, and does what you ask.',
+    details: [
+      'Handles 12 kinds of command: calls, texts, alarms, reminders, calendar, music, phone controls, maps, facts, math, conversions and notes',
+      'Simple commands run instantly on the phone; an optional Gemini mode turns free-form speech into an action, and falls back to offline mode without a network',
+      'Matches contact and app names loosely, understands times like “tomorrow at 7:30 pm”, and keeps reminders through a reboot',
+    ],
+    stack: ['Java', 'Android', 'Speech recognition', 'Text-to-speech', 'Gemini API', 'GitHub Actions'],
   },
   {
     slug: 'groundrag',
@@ -118,7 +133,7 @@ export const labLog = [
     year: '2025',
     entries: [
       { when: '2025–2028', what: 'BSc Computer Science, Cognitive Systems', where: 'Loyola Academy, Hyderabad', note: 'CGPA 8.1/10' },
-      { when: 'From July 2025', what: 'AI & ML with Drone Tech program', where: 'TiHAN IIT Hyderabad × Masai' },
+      { when: 'From July 2025', what: 'AI & ML with Drone Tech program', where: 'TiHAN IIT Hyderabad × Masai', note: 'Completed, with certificate' },
       { when: 'First semester', what: 'Music Club member', where: 'Loyola Academy' },
     ],
   },
@@ -136,9 +151,9 @@ export const labLog = [
 export const toolkit = {
   Languages: ['Python', 'Java', 'C', 'SQL', 'JavaScript'],
   Web: ['React', 'WebSockets', 'Three.js', 'GLSL shaders', 'Pyodide', 'Cloudflare Workers'],
-  'AI / ML': ['Prompt engineering', 'Google AI Studio'],
-  Data: ['MySQL', 'IndexedDB'],
-  Tools: ['Git', 'GitHub', 'GitHub Actions', 'VS Code'],
+  Mobile: ['Android (Java)', 'Speech recognition', 'Text-to-speech'],
+  'AI / ML': ['LLM evaluation', 'Prompt engineering', 'Gemini API'],
+  'Data & tools': ['MySQL', 'IndexedDB', 'pytest', 'Git', 'GitHub Actions', 'VS Code'],
 };
 
 // Harsha's three statements, in his own words (headlines cut from his sentences, picked by him

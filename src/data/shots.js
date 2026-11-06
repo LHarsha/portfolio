@@ -1,5 +1,6 @@
 // Screenshots of the live projects, taken from the deployed apps on 2026-10-24 (Solar System and
-// Raft Failure Lab on 2026-11-02, Telugu LLM Eval on 2026-11-05).
+// Raft Failure Lab on 2026-11-02, Telugu LLM Eval on 2026-11-06).
+// Voice Agent is an Android app with nothing to screenshot; it shows a drawing (src/art/VoiceOrb.jsx).
 // tv: cropped to the TV screen's shape · wide: desktop (1440×900) · tall: phone (390×844).
 import syncTv from '../assets/shots/sync-or-solo-tv.webp';
 import syncWide from '../assets/shots/sync-or-solo-wide.webp';
@@ -43,8 +44,8 @@ export const shots = {
     tall: { src: raftTall, ...TALL, alt: 'Raft Failure Lab on a phone: the cluster with n2 as the new leader and the event log below', caption: 'The replay, on a phone' },
   },
   'telugu-llm-eval': {
-    tv: { src: teluguTv, ...TV, alt: 'Telugu LLM Eval example questions in Telugu script: a festival question with four answer options, tagged by topic, difficulty and region' },
-    wide: { src: teluguWide, ...WIDE, alt: 'Telugu LLM Eval on a laptop: the examples page showing the format of the cultural-knowledge questions, written in Telugu', caption: 'Example questions, written natively in Telugu' },
-    tall: { src: teluguTall, ...TALL, alt: 'Telugu LLM Eval on a phone: example cultural-knowledge questions in Telugu with their tags', caption: 'The examples, on a phone' },
+    tv: { src: teluguTv, ...TV, alt: 'Telugu LLM Eval leaderboard: 30 questions, 2 models evaluated, Gemma 4 31B at 93.3% and Gemini 3.5 Flash-Lite at 86.7% against a random-guess baseline' },
+    wide: { src: teluguWide, ...WIDE, alt: 'Telugu LLM Eval on a laptop: the leaderboard with scores per capability and 95% confidence intervals for each model', caption: 'The leaderboard: two models and a random baseline' },
+    tall: { src: teluguTall, ...TALL, alt: 'Telugu LLM Eval on a phone: the leaderboard rows with each model’s confidence interval', caption: 'The leaderboard, on a phone' },
   },
 };

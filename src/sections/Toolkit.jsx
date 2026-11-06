@@ -13,7 +13,7 @@ import './toolkit.css';
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const groups = Object.entries(toolkit);
-const tones = ['mustard', 'labcoat', 'sky', 'portal', 'labcoat'];
+const tones = ['mustard', 'labcoat', 'alien', 'sky', 'portal'];
 // each tag hangs at its own slight angle, seeded so it's the same every load
 const lean = (() => {
   const r = rng(63);
@@ -33,7 +33,7 @@ export function Toolkit() {
     build: ({ tl, q, el, exit }) => {
       pour(tl, el, 0, 0.4);
       tl.fromTo(q('.toolkit__title, .board'), { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.2, stagger: 0.08 }, 0.3)
-        .fromTo(q('.tag'), { rotate: (i) => (i % 2 ? 28 : -28) }, { rotate: (i) => lean[i], duration: 0.3, ease: 'elastic.out(1, 0.3)', stagger: 0.025 }, 0.45)
+        .fromTo(q('.tag'), { rotate: (i) => (i % 2 ? 28 : -28) }, { rotate: (i) => lean[i], duration: 0.3, ease: 'elastic.out(1, 0.3)', stagger: { amount: 0.2 } }, 0.45)
         .addLabel('settle', 0.95)
         .to({}, { duration: 0.2 }, tl.duration());
       // exit: squash to a bright line, then to a dot, then gone

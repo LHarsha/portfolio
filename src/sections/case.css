@@ -45,6 +45,9 @@
   box-shadow: var(--shadow);
 }
 .case__shot img { display: block; width: 100%; height: auto; }
+.case__shot .voice-orb { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+/* a single drawing, not a desktop + phone pair */
+.case__shots.case__shots--drawn { grid-template-columns: minmax(0, 44rem); }
 .case__shot--wide .case__shot-frame { aspect-ratio: 1440 / 900; }
 .case__shot--tall .case__shot-frame { border-radius: 26px 30px 24px 28px / 28px 24px 30px 26px; }
 .case__shot--tall img { position: absolute; inset: 0; height: 100%; object-fit: cover; object-position: top; }

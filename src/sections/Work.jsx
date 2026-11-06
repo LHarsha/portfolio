@@ -12,6 +12,7 @@ import { blip } from '../lib/sound.js';
 import { prefersReducedMotion, useReducedMotion } from '../lib/motion.js';
 import { scrollToY } from '../lib/smoothScroll.js';
 import { projects } from '../data/facts.js';
+import { VoiceOrb } from '../art/VoiceOrb.jsx';
 import { shots } from '../data/shots.js';
 import './work.css';
 
@@ -52,7 +53,9 @@ function Screen({ project }) {
       </div>
     );
   }
-  const shot = shots[project.slug].tv;
+  const shot = shots[project.slug]?.tv;
+  // an app with no web version (Voice Agent): a drawing of it instead of a screenshot
+  if (!shot) return <VoiceOrb className="screen__art" label={`Drawing of ${project.name}: its glowing orb listening, with what it heard, “Wake me up at 6:30”, in grey above`} />;
   // lazy, but every channel's image is in the DOM, so all of them load as the TV scrolls near
   return <img className="screen__shot" src={shot.src} width={shot.width} height={shot.height} alt={shot.alt} loading="lazy" decoding="async" />;
 }
@@ -176,6 +179,11 @@ export function Work() {
             <div className="work__actions">
               {p.live && (
                 <LiveButton href={p.live} />
+              )}
+              {!p.live && p.repo && (
+                <a className="btn btn--plain" href={p.repo} target="_blank" rel="noreferrer">
+                  View the code
+                </a>
               )}
               <a className="btn btn--plain" href={`/work/${p.slug}`}>
                 Read the case study

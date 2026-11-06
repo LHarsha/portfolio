@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Frame } from '../shell/Frame.jsx';
 import { LiveButton } from '../shell/LiveButton.jsx';
 import { Tv } from '../art/Tv.jsx';
+import { VoiceOrb } from '../art/VoiceOrb.jsx';
 import { person, projects } from '../data/facts.js';
 import { shots } from '../data/shots.js';
 import './case.css';
@@ -20,7 +21,7 @@ function Shot({ shot, className }) {
   );
 }
 
-// A plain, readable page per project: facts and screenshots of the live app.
+// A plain, readable page per project: facts and screenshots of the live app (or a drawing of it).
 export function CaseStudy({ slug }) {
   const i = caseProjects.findIndex((p) => p.slug === slug);
   const p = caseProjects[i];
@@ -77,10 +78,21 @@ export function CaseStudy({ slug }) {
           </div>
         </section>
 
-        <section className="case__shots" aria-label="Screenshots">
-          <Shot shot={shot.wide} className="case__shot--wide" />
-          <Shot shot={shot.tall} className="case__shot--tall" />
-        </section>
+        {shot ? (
+          <section className="case__shots" aria-label="Screenshots">
+            <Shot shot={shot.wide} className="case__shot--wide" />
+            <Shot shot={shot.tall} className="case__shot--tall" />
+          </section>
+        ) : (
+          <section className="case__shots case__shots--drawn" aria-label="Drawing">
+            <figure className="case__shot case__shot--wide">
+              <div className="case__shot-frame">
+                <VoiceOrb label={`Drawing of ${p.name}: its glowing orb listening, with what it heard, “Wake me up at 6:30”, in grey above`} />
+              </div>
+              <figcaption>A drawing of the listening orb. It’s an Android app, so there’s no web demo.</figcaption>
+            </figure>
+          </section>
+        )}
 
         <div className={`case__body${p.details.length ? '' : ' case__body--parts-only'}`}>
           {p.details.length > 0 && (

@@ -54,6 +54,7 @@
   object-position: top;
 }
 
+.screen__art { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .screen__card { position: absolute; inset: 0; display: grid; place-items: center; }
 .screen__bars {
   position: absolute;
@@ -192,8 +193,10 @@
   .work__tv { width: 80%; }
   .work__bench { height: 24px; margin-top: -8px; }
   .work__side { gap: 0.9rem; }
-  .work__tuner { gap: 0.5rem; }
-  .work__ch-num { width: 2.2em; height: 2.2em; font-size: 1rem; }
+  /* every channel button shares one row, however many projects there are */
+  .work__tuner { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 0.4rem; }
+  .work__ch { justify-content: center; padding: 0.3em 0; }
+  .work__ch-num { width: 1.9em; height: 1.9em; font-size: 1rem; }
   .work__info { gap: 0.45rem; }
   .work__kind { font-size: 1.15rem; }
   .work__name { font-size: 2rem; }
